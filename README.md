@@ -4,6 +4,5 @@
 
 ### Colaboradores
 - Alisson Silva dos Santos
-- Hebert
-- Henrique
-- Pedro
+- Henrique dos Santos Alves
+- Pedro Henrique da Silveira Rocha

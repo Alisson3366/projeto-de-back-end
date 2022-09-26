@@ -31,7 +31,7 @@ A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no 
   - atualizar anúncios e usuários,
   - deletar anúncios e usuários.
 
-### Colaboradores
+### Colaboradores:
 - Alisson Silva dos Santos
 - Henrique dos Santos Alves
 - Pedro Henrique da Silveira Rocha

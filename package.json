@@ -1,0 +1,23 @@
+{
+	"name": "sample",
+	"version": "1.0.0",
+	"description": "API REST para o Projeto Integrado de Backend.",
+	"main": "app.js",
+	"scripts": {
+		"start": "nodemon app.js",
+		"test": "jest --watchALL"
+	},
+	"author": "Grupo AHP",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.18.1",
+		"express-session": "^1.17.3",
+		"uuid": "^9.0.0"
+	},
+	"devDependencies": {
+		"jest": "^29.0.3",
+		"nodemon": "^2.0.19",
+		"supertest": "^6.2.4",
+		"swagger-ui-express": "^4.5.0"
+	}
+}

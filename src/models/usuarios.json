@@ -1,0 +1,33 @@
+{
+    "usuarios": [
+        {
+            "id": "",
+            "login": "user1",
+            "senha": "123456",
+            "nome": "JOSUÉ PEREIRA SANTOS",
+            "temPet": true,
+            "pets": [
+                {
+                    "id": 1,
+                    "nome": "July",
+                    "sexo": "fêmea",
+                    "raca": "SRD"
+                },
+                {
+                    "id": 2,
+                    "nome": "Lisa",
+                    "sexo": "fêmea",
+                    "raca": "West Highland"
+                }
+            ]
+        },
+        {
+            "id": "",
+            "login": "user2",
+            "senha": "654321",
+            "nome": "MÁRCIA JOAQUINA FERREIRA",
+            "temPet": false,
+            "pets": []
+        }
+    ]
+}

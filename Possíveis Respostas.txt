@@ -1,0 +1,74 @@
+- Boas Vindas (GET)
+	- Respostas:
+		200 - Mensagem
+- Entrar (POST)
+- Request Body: necessário
+	- Respostas:
+		200 - Mensagem
+		400 - Erro
+
+-------------------------------------
+
+- Consulta Usuários (GET)
+	- Respostas:
+		200 - Array Usuários
+- Cria Usuário (POST)
+	- Request Body: necessário
+	- Respostas:
+		201 - Mensagem
+		400 - Erro
+- Consulta Usuário ID (GET)
+	- Parâmetros: necessário
+	- Respostas:
+		200 - Objeto Usuário
+		400 - Erro
+		404 - Erro
+		500 - Erro
+- Atualiza Usuário ID (PATCH)
+	- Parâmetros: necessário
+	- Request Body: necessário
+	- Respostas:
+		200 - Mensagem
+		400 - Erro
+		404 - Erro
+		500 - Erro
+- Deleta Usuário ID (DELETE)
+	- Parâmetros: necessário
+	- Respostas:
+		200 - Mensagem
+		400 - Erro
+		404 - Erro
+		500 - Erro
+
+-------------------------------------
+
+- Consulta Anúncios (GET)
+	- Respostas:
+		200 - Array Usuários
+- Cria Anúncio (POST)
+	- Request Body: necessário
+	- Respostas:
+		201 - Mensagem
+		400 - Erro
+- Consulta Anúncio ID (GET)
+	- Parâmetros: necessário
+	- Respostas:
+		200 - Objeto Usuário
+		400 - Erro
+		404 - Erro
+		500 - Erro
+- Atualiza Anúncio ID (PATCH)
+	- Parâmetros: necessário
+	- Request Body: necessário
+	- Respostas:
+		200 - Mensagem
+		400 - Erro
+		404 - Erro
+		500 - Erro
+- Deleta Anúncio ID (DELETE)
+	- Parâmetros: necessário
+	- Respostas:
+		200 - Mensagem
+		400 - Erro
+		404 - Erro
+		500 - Erro

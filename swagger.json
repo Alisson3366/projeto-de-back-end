@@ -213,7 +213,7 @@
 				"operationId": "consultaUsuarioID",
 				"parameters": [
 					{
-						"name": "usuarioID",
+						"name": "id",
 						"in": "path",
 						"description": "ID do usuário a ser consultado.",
 						"required": true,
@@ -290,7 +290,7 @@
 				"operationId": "atualizaUsuario",
 				"parameters": [
 					{
-						"name": "usuarioID",
+						"name": "id",
 						"in": "path",
 						"description": "ID do usuário a ser atualizado.",
 						"required": true,
@@ -397,7 +397,7 @@
 				"operationId": "deletaUsuario",
 				"parameters": [
 					{
-						"name": "usuarioID",
+						"name": "id",
 						"in": "path",
 						"description": "ID do usuário a ser deletado.",
 						"required": true,
@@ -583,7 +583,7 @@
 				"operationId": "consultaAnuncioID",
 				"parameters": [
 					{
-						"name": "anuncioID",
+						"name": "id",
 						"in": "path",
 						"description": "ID do anúncio a ser consultado.",
 						"required": true,
@@ -660,7 +660,7 @@
 				"operationId": "atualizaAnuncio",
 				"parameters": [
 					{
-						"name": "anuncioID",
+						"name": "id",
 						"in": "path",
 						"description": "ID do anúncio a ser atualizado.",
 						"required": true,
@@ -779,7 +779,7 @@
 				"operationId": "deletaAnuncio",
 				"parameters": [
 					{
-						"name": "anuncioID",
+						"name": "id",
 						"in": "path",
 						"description": "ID do anúncio a ser deletado.",
 						"required": true,

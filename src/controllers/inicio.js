@@ -2,12 +2,10 @@ const usuariosDados = require('../models/usuarios.json');
 const usuarios = usuariosDados.usuarios;
 
 function boasVindas(req, res, next) {
-	res.status(200).send(
-		`Bem vindos. Esta é a página inicial!
-
-		Utilize o verbo POST nessa mesma rota e informe seu login e senha no corpo da requisição para fazer login.`
-	);
-
+	res.status(200).json({
+		Mensagem: `Bem vindos. Esta é a página inicial!
+		Utilize o verbo POST nessa mesma rota e informe seu login e senha no corpo da requisição para fazer login.`,
+	});
 	next();
 }
 

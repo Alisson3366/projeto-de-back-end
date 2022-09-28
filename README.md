@@ -32,6 +32,6 @@ A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no 
 
 ### Colaboradores:
 
--   Alisson Silva dos Santos
--   Henrique dos Santos Alves
--   Pedro Henrique da Silveira Rocha
+-   Alisson Silva dos Santos - 2214290086
+-   Henrique dos Santos Alves - 2124290023
+-   Pedro Henrique da Silveira Rocha - 2124290005

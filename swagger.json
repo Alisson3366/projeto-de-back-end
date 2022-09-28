@@ -1,0 +1,577 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "Meu Amigo PET",
+		"version": "1.0.0",
+		"description": "Meu Amigo PET é uma API REST cujo objetivo principal é conectar usuários, sejam eles pais de PETs ou aspirantes ao cargo, com objetivos semelhantes: adoção ou cruzamento. A conexão entre usuários se dá por meio de anúncios, os quais podem ser de adoção ou cruzamento. Assim, usuários logados podem acessar o 'feed de anúnicos' e obter informações e dados de contato com outros usuários. A API visa atender usuários comuns e administradores da API com funcionalidades diferentes para cada um dos tipos de contas. Os usuários devem estar logados no servidor para acessar as diferentes rotas e suas funcionalidades. A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no arquivo package.json), o framework Express e o [GitHub](https://github.com/Alisson3366/projeto-de-back-end). Repositório GitHub: [Meu Amigo PET](https://github.com/Alisson3366/projeto-de-back-end)."
+	},
+	"servers": [
+		{
+			"url": "http://localhost:8080"
+		}
+	],
+	"tags": [
+		{
+			"name": "inicio",
+			"description": "Funcionalidades da rota básica  \"/\""
+		},
+		{
+			"name": "usuarios",
+			"description": "Funcionalidades da rota \"/usuarios\""
+		},
+		{
+			"name": "anuncios",
+			"description": "Funcionalidades da rota \"/anuncios\""
+		}
+	],
+	"paths": {
+		"/": {
+			"get": {
+				"tags": ["inicio"],
+				"summary": "Boas vindas a API.",
+				"description": "Boas vindas a API.",
+				"operationId": "boasVindas",
+				"responses": {
+					"200": {
+						"description": "Boas vindas a API!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["inicio"],
+				"summary": "Entrar na API.",
+				"description": "Entrar na API.",
+				"operationId": "entrarAPI",
+				"requestBody": {
+					"description": "Faça login na API usando login e senha.",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"login": {
+										"type": "string"
+									},
+									"senha": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Login efetuado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Usuário ou senha inválidos!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/usuarios": {
+			"get": {
+				"tags": ["usuarios"],
+				"summary": "Consulta de todos os usuários.",
+				"description": "Consulta de todos os usuários.",
+				"operationId": "consultaUsuarios",
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/USUARIOS"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["usuarios"],
+				"summary": "Cria um novo usuário na API.",
+				"description": "Cria um novo usuário na API.",
+				"operationId": "criaUsuario",
+				"requestBody": {
+					"description": "Cria um novo usuário na API.",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"login": {
+										"type": "string"
+									},
+									"senha": {
+										"type": "string"
+									},
+									"nome": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Usuário criado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Alguma informação passada é inválida!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/usuarios/{id}": {
+			"get": {
+				"tags": ["usuarios"],
+				"summary": "Consulta de usuário específico pelo ID.",
+				"description": "Consulta de usuário específico pelo ID.",
+				"operationId": "consultaUsuarioID",
+				"parameters": [
+					{
+						"name": "usuarioID",
+						"in": "path",
+						"description": "ID do usuário a ser consultado.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/USUARIOS"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ID não encontrado ou inválido!"
+					},
+					"404": {
+						"description": "Usuário não encontrado!"
+					}
+				}
+			},
+			"patch": {
+				"tags": ["usuarios"],
+				"summary": "Atualiza um usuário já existente.",
+				"description": "Atualiza um usuário já existente.",
+				"operationId": "atualizaUsuario",
+				"parameters": [
+					{
+						"id": "usuarioID",
+						"in": "path",
+						"description": "ID do usuário a ser atualizado.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Atualiza um usuário já existente.",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/USUARIOS"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Usuário atualizado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/USUARIOS"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ID não encontrado ou inválido!"
+					},
+					"404": {
+						"description": "Usuário não encontrado!"
+					}
+				}
+			},
+			"delete": {
+				"tags": ["usuarios"],
+				"summary": "Deleta um usuário da API.",
+				"description": "Deleta um usuário da API.",
+				"operationId": "deletaUsuario",
+				"parameters": [
+					{
+						"id": "usuarioID",
+						"in": "path",
+						"description": "ID do usuário a ser deletado.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Usuário deletado com sucesso!",
+						"content": {
+							"application/json": null
+						}
+					}
+				}
+			}
+		},
+		"/anuncios": {
+			"get": {
+				"tags": ["anuncios"],
+				"summary": "Consulta de todos os anúncios",
+				"description": "Consulta de todos os anúncios",
+				"operationId": "consultaAnuncios",
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Pet"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid status value"
+					}
+				}
+			},
+			"post": {
+				"tags": ["anuncios"],
+				"summary": "Cria um novo anúncio na API",
+				"description": "Cria um novo anúncio na API",
+				"operationId": "criaAnuncio",
+				"requestBody": {
+					"description": "Cria um novo anúncio na API",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Pet"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Anúncio criado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Pet"
+								}
+							}
+						}
+					},
+					"405": {
+						"description": "Invalid input"
+					}
+				}
+			}
+		},
+		"/anuncios/{id}": {
+			"get": {
+				"tags": ["anuncios"],
+				"summary": "Consulta de anúncio específico pelo ID",
+				"description": "Consulta de anúncio específico pelo ID",
+				"operationId": "consultaAnuncioID",
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Pet"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid status value"
+					}
+				}
+			},
+			"patch": {
+				"tags": ["anuncios"],
+				"summary": "Atualiza um anúncio já existente",
+				"description": "Atualiza um anúncio já existente",
+				"operationId": "atualizaAnuncio",
+				"requestBody": {
+					"description": "Atualiza um anúncio já existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Pet"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Anúncio atualizado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Pet"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ID não encontrado ou inválido!"
+					},
+					"404": {
+						"description": "Anúncio não encontrado!"
+					},
+					"405": {
+						"description": "Validation exception!"
+					}
+				}
+			},
+			"delete": {
+				"tags": ["anuncios"],
+				"summary": "Deleta um anúncio da API",
+				"description": "Deleta um anúncio da API",
+				"operationId": "deletaAnuncio",
+				"parameters": [
+					{
+						"name": "petId",
+						"in": "path",
+						"description": "Pet id to delete",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"400": {
+						"description": "Invalid pet value"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"PETS": {
+				"required": ["nome", "sexo", "raca"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+					},
+					"nome": {
+						"type": "string",
+						"example": "NINA"
+					},
+					"sexo": {
+						"type": "string",
+						"example": "fêmea"
+					},
+					"raca": {
+						"type": "string",
+						"example": "beagle"
+					}
+				}
+			},
+			"USUARIOS": {
+				"required": ["login", "senha", "nome"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+					},
+					"login": {
+						"type": "string",
+						"example": "user1"
+					},
+					"senha": {
+						"type": "string",
+						"example": "123456789"
+					},
+					"nome": {
+						"type": "string",
+						"example": "João Vinceslau"
+					},
+					"temPet": {
+						"type": "boolean",
+						"example": true
+					},
+					"pets": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/PETS"
+						}
+					}
+				}
+			},
+			"ANUNCIOS": {
+				"required": [
+					"proprietario",
+					"tipo",
+					"titulo",
+					"raca",
+					"sexo",
+					"quantidade"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+					},
+					"proprietario": {
+						"type": "string",
+						"example": "user1"
+					},
+					"tipo": {
+						"type": "string",
+						"example": "adoção"
+					},
+					"titulo": {
+						"type": "string",
+						"example": "3 FILHOTES DE PIT BUL PARA ADOÇÃO"
+					},
+					"raca": {
+						"type": "string",
+						"example": "american pit bull terrier"
+					},
+					"sexo": {
+						"type": "string",
+						"example": "ambos"
+					},
+					"quantidade": {
+						"type": "integer",
+						"example": 4
+					}
+				}
+			}
+		},
+		"requestBodies": {
+			"Pet": {
+				"description": "Pet object that needs to be added to the store",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/Pet"
+						}
+					}
+				}
+			},
+			"UserArray": {
+				"description": "List of user object",
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/components/schemas/User"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

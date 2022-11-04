@@ -1,5 +1,8 @@
+require('dotenv').config();
+
 // Importação dos módulos NPM
 const express = require('express');
+const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
@@ -24,9 +27,15 @@ app.use('/usuarios', rotaUsuario);
 app.use('/anuncios', rotaAnuncio);
 
 // Inicialização da aplicação
-app.listen(porta, () => {
-	console.log(`Aplicação rodanddo em http://localhost:${porta}`);
-});
+mongoose
+	.connect(process.env.DATABASE_URL)
+	.then(
+		console.log('Conexão com o MongoDB estabelecida com sucesso!'),
+		app.listen(porta, () => {
+			console.log(`Aplicação rodanddo em http://localhost:${porta}`);
+		})
+	)
+	.catch((error) => console.log('A conexão com o MongoDB falhou!', error));
 
 // Exportação de dados e módulos declarados nesse arquivos
 module.exports = app;

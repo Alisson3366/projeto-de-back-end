@@ -14,7 +14,7 @@ const anuncioSchema = new mongoose.Schema(
 			trim: true,
 			enum: {
 				values: ['adoção', 'cruzamento'],
-				message: 'O tipo deve ser: "adoção" ou "cruzamento"!',
+				message: 'O tipo deve ser: adoção ou cruzamento!',
 			},
 		},
 		titulo: {
@@ -28,7 +28,7 @@ const anuncioSchema = new mongoose.Schema(
 			trim: true,
 			enum: {
 				values: ['ambos', 'fêmea', 'macho'],
-				message: 'O sexo deve ser: "ambos", "fêmea" ou "macho"!',
+				message: 'O sexo deve ser: ambos, fêmea ou macho!',
 			},
 		},
 		raca: {

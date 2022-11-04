@@ -19,7 +19,7 @@ const petsSchema = new mongoose.Schema(
 			trim: true,
 			enum: {
 				values: ['fêmea', 'macho'],
-				message: 'O sexo do pet deve ser: "fêmea" ou "macho"!',
+				message: 'O sexo do pet deve ser: fêmea ou macho!',
 			},
 		},
 		raca: {

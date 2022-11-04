@@ -17,9 +17,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Declaração dos models utilizados na aplicação (erro -> circular dependencies)
 
 // Declaração das rotas da aplicação
-const rotaInicio = require('./src/routes/inicio');
-const rotaUsuario = require('./src/routes/usuarios');
-const rotaAnuncio = require('./src/routes/anuncios');
+const rotaInicio = require('./content/routes/inicio.router');
+const rotaUsuario = require('./content/routes/usuarios.router');
+const rotaAnuncio = require('./content/routes/anuncios.router');
 
 // Utilização das rotas
 app.use('/', rotaInicio);

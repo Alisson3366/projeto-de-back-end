@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
+const { v4: uuid } = require('uuid');
 
-const petsSchema = new mongoose.Schema(
+const petSchema = new mongoose.Schema(
 	{
+		_id: {
+			type: String,
+			required: true,
+			default: uuid(),
+		},
 		proprietario: {
 			// O PET deve estar associado a algum usuário, pelo _id do usuário talvez.
 			type: String,
@@ -34,4 +40,6 @@ const petsSchema = new mongoose.Schema(
 	}
 );
 
-module.exports = mongoose.model('Pet', petsSchema);
+const petModel = mongoose.model('Pet', petSchema);
+
+module.exports = petModel;

@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
+const { v4: uuid } = require('uuid');
 
 const anuncioSchema = new mongoose.Schema(
 	{
+		_id: {
+			type: String,
+			required: true,
+			default: uuid(),
+		},
 		proprietario: {
 			// Dever ser o usuário logado Ex.: usuario.login.
 			type: String,
@@ -43,7 +49,7 @@ const anuncioSchema = new mongoose.Schema(
 				return this.tipo === 'adoção';
 				// Se o tipo for adoção, então a quantidade será obrigatória.
 			},
-			default: null,
+			default: 0,
 		},
 	},
 	{
@@ -51,4 +57,6 @@ const anuncioSchema = new mongoose.Schema(
 	}
 );
 
-module.exports = mongoose.model('Anuncio', anuncioSchema);
+const anuncioModel = mongoose.model('Anuncio', anuncioSchema);
+
+module.exports = anuncioModel;

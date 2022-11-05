@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
+const { v4: uuid } = require('uuid');
 
 const usuarioSchema = new mongoose.Schema(
 	{
+		_id: {
+			type: String,
+			required: true,
+			default: uuid(),
+		},
 		login: {
 			type: String,
 			required: [true, 'O login é obrigatório!'],
@@ -20,17 +26,22 @@ const usuarioSchema = new mongoose.Schema(
 		temPet: {
 			type: Boolean,
 			required: true,
-			default: false,
+			default: () => {
+				return this.pets != false;
+			},
 		},
-		pets: {
-			type: Array,
-			required: false,
-			default: null,
-		},
+		pets: [
+			{
+				type: mongoose.ObjectId,
+				ref: 'Pet',
+			},
+		],
 	},
 	{
 		timestamps: true,
 	}
 );
 
-module.exports = mongoose.model('Usuario', usuarioSchema);
+const usuarioModel = mongoose.model('Usuario', usuarioSchema);
+
+module.exports = usuarioModel;

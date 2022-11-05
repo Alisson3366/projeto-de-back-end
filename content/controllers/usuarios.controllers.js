@@ -1,5 +1,5 @@
-// const { v4: uuid } = require('uuid');
-const { ObjectID } = require('bson');
+const { v4: uuid } = require('uuid');
+// const { ObjectID } = require('bson');
 
 // const usuariosDados = require('../models/usuarios.json');
 // const usuarios = usuariosDados.usuarios;
@@ -26,7 +26,7 @@ async function consultaUsuarios(req, res) {
 // }
 
 async function consultaUsuarioId(req, res) {
-	await Usuario.findOne({ _id: ObjectID(req.params.id) })
+	await Usuario.findOne({ _id: req.params.id }) // ({ _id: ObjectID(req.params.id) })
 		.then((usuario) => {
 			if (usuario) {
 				return res.status(200).json(usuario);
@@ -110,7 +110,7 @@ async function criaUsuario(req, res) {
 // }
 
 async function atualizaUsuario(req, res) {
-	await Usuario.findOneAndUpdate({ _id: ObjectID(req.params.id) }, req.body, { runValidators: true })
+	await Usuario.findOneAndUpdate({ _id: req.params.id }, req.body, { runValidators: true }) // ({ _id: ObjectID(req.params.id) })
 		.then((usuario) => {
 			if (usuario) {
 				return res.status(200).json('Usuário atualizado com sucesso!');
@@ -135,7 +135,7 @@ async function atualizaUsuario(req, res) {
 // }
 
 async function deletaUsuario(req, res) {
-	await Usuario.findOneAndDelete({ _id: ObjectID(req.params.id) }, { runValidators: true })
+	await Usuario.findOneAndDelete({ _id: req.params.id }, { runValidators: true }) // ({ _id: ObjectID(req.params.id) })
 		.then((usuario) => {
 			if (usuario) {
 				return res.status(200).json('Usuário deletado com sucesso!');

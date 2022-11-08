@@ -3,7 +3,7 @@ const usuarios = usuariosDados.usuarios;
 
 function boasVindas(req, res, next) {
 	res.status(200).json({
-		Mensagem: `Bem vindos. Esta é a página inicial! Utilize o verbo POST nessa mesma rota e informe seu login e senha no corpo da requisição para fazer login.`,
+		Mensagem: `Bem vindos. Esta é a página inicial!\nUtilize o verbo POST nessa mesma rota e informe seu login e senha para fazer login.`,
 	});
 	next();
 }
@@ -19,14 +19,8 @@ function entrar(req, res) {
 
 	if (!usuarioEntrada) {
 		return res.status(400).json({ Erro: 'Usuário ou senha inválidos!' });
-	} else if (
-		usuarioEntrada.login === loginEntrada &&
-		usuarioEntrada.senha === senhaEntrada
-	) {
-		//req.session.login = login;
-		return res
-			.status(200)
-			.json({ Mensagem: 'Login efetuado com sucesso!' });
+	} else if (usuarioEntrada.login === loginEntrada && usuarioEntrada.senha === senhaEntrada) {
+		return res.status(200).json({ Mensagem: 'Login efetuado com sucesso!' });
 	} else {
 		return res.status(400).json({ Erro: 'Usuário ou senha inválidos!' });
 	}

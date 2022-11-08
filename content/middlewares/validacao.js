@@ -1,4 +1,4 @@
-const { v4: uuid } = require('uuid');
+// const { v4: uuid } = require('uuid');
 const { validate: isUuid } = require('uuid');
 const Usuario = require('../models/usuarios.models');
 const Anuncio = require('../models/anuncios.models');
@@ -8,16 +8,16 @@ const Anuncio = require('../models/anuncios.models');
 // const anuncios = anunciosDados.anuncios;
 // const usuarios = usuariosDados.usuarios;
 
-function criaId() {
-	usuarios.forEach((usuario) => {
-		usuario.id = uuid();
-	});
-	anuncios.forEach((anuncio) => {
-		anuncio.id = uuid();
-	});
-}
+// function criaId() {
+// 	usuarios.forEach((usuario) => {
+// 		usuario.id = uuid();
+// 	});
+// 	anuncios.forEach((anuncio) => {
+// 		anuncio.id = uuid();
+// 	});
+// }
 
-criaId();
+// criaId();
 
 async function validaIdUsuario(req, res, next) {
 	const index = req.params;
@@ -62,5 +62,5 @@ async function validaIdAnuncio(req, res, next) {
 module.exports = {
 	validaIdUsuario,
 	validaIdAnuncio,
-	criaId,
+	// criaId,
 };

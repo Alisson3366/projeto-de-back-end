@@ -18,17 +18,15 @@ const usuarioSchema = new mongoose.Schema(
 			required: [true, 'A senha é obrigatória!'],
 			trim: true,
 		},
-		name: {
+		nome: {
 			type: String,
 			required: [true, 'O nome é obrigatório!'],
 			trim: true,
 		},
 		temPet: {
 			type: Boolean,
-			required: true,
-			default: () => {
-				return this.pets != false;
-			},
+			required: false,
+			default: false,
 		},
 		pets: [
 			{

@@ -6,6 +6,19 @@ const { v4: uuid } = require('uuid');
 
 const Usuario = require('../models/usuarios.models');
 
+async function verificarLoginUsuario(login) {
+	await Usuario.findOne({ login: login }).then(
+		(usuario) => {
+			if (usuario) {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		() => false
+	);
+}
+
 // function consultaUsuarios(req, res) {
 // 	res.status(200).json(usuarios);
 // }
@@ -70,9 +83,35 @@ async function consultaUsuarioId(req, res) {
 // }
 
 async function criaUsuario(req, res) {
-	const novoUsuario = new Usuario(req.body);
+	const { login, senha, nome } = req.body;
+	let novoUsuario = {
+		login: String(req.body.login).toLowerCase(),
+		senha: String(req.body.senha).toLowerCase(),
+		nome: String(req.body.nome).toUpperCase(),
+	};
+
+	// Verificação para criação de um novo usuário
+	if (!login || !senha || !nome) {
+		return res.status(400).json({
+			Erro: 'Para criar um usuario informe: login, senha e nome!',
+		});
+	}
+
+	// Funcionalidade que verifica se um login e senha já existem
+	await Usuario.findOne({ login: login }).then((usuario) => {
+		if (usuario) {
+			console.log('Bosta'); //tá entrando aqui
+			return res.status(400).json({
+				Erro: 'O login informado já existe. Tente outro!',
+			});
+		} else {
+			console.log('Merda');
+			return (novoUsuario = new Usuario(novoUsuario));
+		}
+	});
+
 	await novoUsuario
-		.save()
+		.save({ runValidators: true })
 		.then((document) => {
 			return res.status(201).json(document);
 		})

@@ -7,6 +7,7 @@ const anuncioSchema = new mongoose.Schema(
 		_id: {
 			type: String,
 			required: true,
+			immutable: true,
 			default: uuid(),
 		},
 		proprietario: {
@@ -50,7 +51,7 @@ const anuncioSchema = new mongoose.Schema(
 				return this.tipo === 'adoção';
 				// Se o tipo for adoção, então a quantidade será obrigatória.
 			},
-			default: 0,
+			min: 1,
 		},
 	},
 	{

@@ -8,4 +8,8 @@ router.get('/', controller.boasVindas);
 
 router.post('/', controller.entrar);
 
+router.post('/', controller.registrar);
+
+router.post('/login', controller.login);
+
 module.exports = router;

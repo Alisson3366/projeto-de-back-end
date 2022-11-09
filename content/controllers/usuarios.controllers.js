@@ -84,11 +84,7 @@ async function consultaUsuarioId(req, res) {
 
 async function criaUsuario(req, res) {
 	const { email, senha, nome } = req.body;
-	let novoUsuario = {
-		email: String(req.body.email).toLowerCase(),
-		senha: String(req.body.senha).toLowerCase(),
-		nome: String(req.body.nome).toUpperCase(),
-	};
+	let novoUsuario = { email, senha, nome };
 
 	// Verificação para criação de um novo usuário
 	if (!email || !senha || !nome) {
@@ -98,22 +94,22 @@ async function criaUsuario(req, res) {
 	}
 
 	// Funcionalidade que verifica se um email e senha já existem
-	await Usuario.find({ email: email }).then((usuario) => {
+	await Usuario.exists({ email: email }).then((usuario) => {
+		// verificar se o await é necessário
 		if (usuario) {
-			console.log('Bosta'); //tá entrando aqui
+			console.log('Bosta');
 			return res.status(400).json({
 				Erro: 'O email informado já existe. Tente outro!',
 			});
 		} else {
 			console.log('Merda');
-			novoUsuario = new Usuario(novoUsuario);
 			return novoUsuario;
 		}
 	});
 	// .then(async () => {});
 
-	await novoUsuario
-		.save({ runValidators: true }) //!!!!!! PROBLEMA
+	await new Usuario(novoUsuario)
+		.save({ runValidators: true })
 		.then((document) => {
 			return res.status(201).json(document);
 		})
@@ -124,6 +120,8 @@ async function criaUsuario(req, res) {
 			});
 			return res.status(500).json(msgErro);
 		});
+	//!!!!!! PROBLEMA método .save() não está sendo reconhecido
+	// funciona quando utilizamos await new Usuario
 }
 
 // function atualizaUsuario(req, res) {
@@ -151,6 +149,8 @@ async function criaUsuario(req, res) {
 // }
 
 async function atualizaUsuario(req, res) {
+	// await Usuario.find().save()
+	// Não utilizar uptade
 	await Usuario.findOneAndUpdate({ _id: req.params.id }, req.body, { runValidators: true }) // ({ _id: ObjectID(req.params.id) })
 		.then((usuario) => {
 			if (usuario) {

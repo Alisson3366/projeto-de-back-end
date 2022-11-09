@@ -7,6 +7,7 @@ const petSchema = new mongoose.Schema(
 		_id: {
 			type: String,
 			required: true,
+			immutable: true,
 			default: uuid(),
 		},
 		// proprietario: {

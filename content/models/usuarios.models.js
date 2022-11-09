@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
+const { petSchema } = require('../models/pets.models');
 
 const usuarioSchema = new mongoose.Schema(
 	{
@@ -8,32 +9,33 @@ const usuarioSchema = new mongoose.Schema(
 			required: true,
 			default: uuid(),
 		},
-		login: {
+		email: {
 			type: String,
-			required: [true, 'O login é obrigatório!'],
+			required: [true, 'O email é obrigatório!'],
 			trim: true,
+			unique: true,
 		},
 		senha: {
 			type: String,
 			required: [true, 'A senha é obrigatória!'],
 			trim: true,
+			selected: false,
 		},
 		nome: {
 			type: String,
 			required: [true, 'O nome é obrigatório!'],
 			trim: true,
 		},
-		temPet: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		pets: [
-			{
-				type: mongoose.ObjectId,
-				ref: 'Pet',
-			},
-		],
+		// temPet: {
+		// 	type: Boolean,
+		// 	required: true,
+		// 	enum: {
+		// 		values: [true, false],
+		// 		message: 'O sexo deve ser: ambos, fêmea ou macho!',
+		// 	},
+		// 	default: false,
+		// },
+		pets: [petSchema],
 	},
 	{
 		timestamps: true,

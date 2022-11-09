@@ -6,8 +6,8 @@ const { v4: uuid } = require('uuid');
 
 const Usuario = require('../models/usuarios.models');
 
-async function verificarLoginUsuario(login) {
-	await Usuario.findOne({ login: login }).then(
+async function verificarLoginUsuario(email) {
+	await Usuario.findOne({ email: email }).then(
 		(usuario) => {
 			if (usuario) {
 				return true;
@@ -53,27 +53,27 @@ async function consultaUsuarioId(req, res) {
 }
 
 // function criaUsuario(req, res) {
-// 	const { login, senha, nome } = req.body;
+// 	const { email, senha, nome } = req.body;
 // 	let novoUsuario = {
 // 		id: uuid(),
-// 		login: String(req.body.login).toLowerCase(),
+// 		email: String(req.body.email).toLowerCase(),
 // 		senha: String(req.body.senha).toLowerCase(),
 // 		nome: String(req.body.nome).toUpperCase(),
 // 		temPet: false,
 // 		pets: [],
 // 	};
 
-// 	if (!login || !senha || !nome) {
+// 	if (!email || !senha || !nome) {
 // 		return res.status(400).json({
-// 			Erro: 'Para criar um usuario informe: login, senha e nome!',
+// 			Erro: 'Para criar um usuario informe: email, senha e nome!',
 // 		});
 // 	}
 
-// 	// Funcionalidade que verifica se um login e senha já existem
+// 	// Funcionalidade que verifica se um email e senha já existem
 // 	for (conta of usuarios) {
-// 		if (login === conta.login) {
+// 		if (email === conta.email) {
 // 			return res.status(400).json({
-// 				Erro: 'O login informado já existe. Tente outro!',
+// 				Erro: 'O email informado já existe. Tente outro!',
 // 			});
 // 		}
 // 	}
@@ -83,35 +83,37 @@ async function consultaUsuarioId(req, res) {
 // }
 
 async function criaUsuario(req, res) {
-	const { login, senha, nome } = req.body;
+	const { email, senha, nome } = req.body;
 	let novoUsuario = {
-		login: String(req.body.login).toLowerCase(),
+		email: String(req.body.email).toLowerCase(),
 		senha: String(req.body.senha).toLowerCase(),
 		nome: String(req.body.nome).toUpperCase(),
 	};
 
 	// Verificação para criação de um novo usuário
-	if (!login || !senha || !nome) {
+	if (!email || !senha || !nome) {
 		return res.status(400).json({
-			Erro: 'Para criar um usuario informe: login, senha e nome!',
+			Erro: 'Para criar um usuario informe: email, senha e nome!',
 		});
 	}
 
-	// Funcionalidade que verifica se um login e senha já existem
-	await Usuario.findOne({ login: login }).then((usuario) => {
+	// Funcionalidade que verifica se um email e senha já existem
+	await Usuario.find({ email: email }).then((usuario) => {
 		if (usuario) {
 			console.log('Bosta'); //tá entrando aqui
 			return res.status(400).json({
-				Erro: 'O login informado já existe. Tente outro!',
+				Erro: 'O email informado já existe. Tente outro!',
 			});
 		} else {
 			console.log('Merda');
-			return (novoUsuario = new Usuario(novoUsuario));
+			novoUsuario = new Usuario(novoUsuario);
+			return novoUsuario;
 		}
 	});
+	// .then(async () => {});
 
 	await novoUsuario
-		.save({ runValidators: true })
+		.save({ runValidators: true }) //!!!!!! PROBLEMA
 		.then((document) => {
 			return res.status(201).json(document);
 		})
@@ -126,23 +128,23 @@ async function criaUsuario(req, res) {
 
 // function atualizaUsuario(req, res) {
 // 	let usuario = usuarios.find((value) => value.id === req.params.id);
-// 	const { login, senha, nome } = req.body;
-// 	if (!login && !senha && !nome) {
+// 	const { email, senha, nome } = req.body;
+// 	if (!email && !senha && !nome) {
 // 		return res.status(400).json({
-// 			Erro: 'Informe pelo menos uma informação para alterar o usuário: login, senha ou nome!',
+// 			Erro: 'Informe pelo menos uma informação para alterar o usuário: email, senha ou nome!',
 // 		});
 // 	}
 
-// 	// Funcionalidade que verifica se um login já existe
+// 	// Funcionalidade que verifica se um email já existe
 // 	for (let conta of usuarios) {
-// 		if (login === conta.login) {
+// 		if (email === conta.email) {
 // 			return res.status(400).json({
-// 				Erro: 'O login informado já existe. Tente outro!',
+// 				Erro: 'O email informado já existe. Tente outro!',
 // 			});
 // 		}
 // 	}
 
-// 	if (login) usuario.login = String(req.body.login).toLowerCase();
+// 	if (email) usuario.email = String(req.body.email).toLowerCase();
 // 	if (senha) usuario.senha = String(req.body.senha).toLowerCase();
 // 	if (nome) usuario.nome = String(req.body.nome).toLowerCase();
 // 	res.status(200).json({ Mensagem: 'O usuário foi atualizado!' });

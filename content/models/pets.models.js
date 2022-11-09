@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
+// const { usuarioModel } = require('../models/usuarios.models');
 
 const petSchema = new mongoose.Schema(
 	{
@@ -8,13 +9,13 @@ const petSchema = new mongoose.Schema(
 			required: true,
 			default: uuid(),
 		},
-		proprietario: {
-			// O PET deve estar associado a algum usuário, pelo _id do usuário talvez.
-			type: String,
-			required: [true, 'O proprietario do anúncio é obrigatório!'],
-			trim: true,
-		},
-		name: {
+		// proprietario: {
+		// 	type: String,
+		// 	required: [true, 'O proprietario do pet é obrigatório!'],
+		// 	trim: true,
+		// 	default: usuarioModel,
+		// },
+		nome: {
 			type: String,
 			required: [true, 'O nome do pet é obrigatório!'],
 			trim: true,
@@ -42,4 +43,4 @@ const petSchema = new mongoose.Schema(
 
 const petModel = mongoose.model('Pet', petSchema);
 
-module.exports = petModel;
+module.exports = { petModel, petSchema };

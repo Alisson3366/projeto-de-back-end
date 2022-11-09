@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
+const Usuario = require('../models/usuarios.models');
 
 const anuncioSchema = new mongoose.Schema(
 	{
@@ -9,10 +10,10 @@ const anuncioSchema = new mongoose.Schema(
 			default: uuid(),
 		},
 		proprietario: {
-			// Dever ser o usuário logado Ex.: usuario.login.
 			type: String,
 			required: [true, 'O proprietario do anúncio é obrigatório!'],
 			trim: true,
+			default: Usuario._id,
 		},
 		tipo: {
 			type: String,

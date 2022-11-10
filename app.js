@@ -22,9 +22,9 @@ const rotaUsuario = require('./content/routes/usuarios.router');
 const rotaAnuncio = require('./content/routes/anuncios.router');
 
 // Utilização das rotas
-app.use('/', rotaInicio);
-app.use('/usuarios', rotaUsuario);
-app.use('/anuncios', rotaAnuncio);
+app.use(rotaInicio);
+app.use(rotaUsuario);
+app.use(rotaAnuncio);
 
 // Inicialização da aplicação
 mongoose

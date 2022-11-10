@@ -59,8 +59,18 @@ async function validaIdAnuncio(req, res, next) {
 	next();
 }
 
+async function validaToken() {
+	const token = req.headers['authorization'];
+	const segredo = process.env.SEGREDO;
+	jwt.verify(token, segredo, (error, decoded) => {
+		if (error) {
+			return res.status(401).json({ Erro: 'Acesso negado!' }).end();
+		}
+	});
+}
+
 module.exports = {
 	validaIdUsuario,
 	validaIdAnuncio,
-	// criaId,
+	validaToken,
 };

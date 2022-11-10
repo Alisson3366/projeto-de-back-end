@@ -8,7 +8,7 @@ const swaggerDocument = require('./swagger.json');
 
 // Instanciamento da aplicação e definição da porta
 const app = express();
-const porta = 8080;
+const porta = process.env.PORTA || 8080;
 
 // Ferramentas necessários para a execução da aplicação
 app.use(express.json());

@@ -35,3 +35,9 @@ A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no 
 -   Alisson Silva dos Santos - 2214290086
 -   Henrique dos Santos Alves - 2124290023
 -   Pedro Henrique da Silveira Rocha - 2124290005
+
+### Requisitos:
+
+-   DATABASE_URL = mongodb+srv://alisson3366:336699@thecluster.rf7trvj.mongodb.net/Meu-Amigo-PET?retryWrites=true&w=majority
+-   PORTA = 8080
+-   SEGREDO = JACAREDECAPACETE

@@ -1,77 +1,90 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.models');
-
-// const usuariosDados = require('../models/usuarios.json');
-// const usuarios = usuariosDados.usuarios;
 
 function boasVindas(req, res, next) {
 	res.status(200).json({
-		Mensagem: `Bem vindos. Esta é a página inicial!\nUtilize o verbo POST nessa mesma rota e informe seu login e senha para fazer login.`,
+		Mensagem: `Bem vindos ao Meu Amigo PET!`,
 	});
-	next();
 }
 
 async function registrar(req, res) {
-	const usuario = new Usuario(req.body);
-	usuario.password = bcrypt.hashSync(usuario.password, 8);
-	await usuario
+	const { email, senha, nome } = req.body;
+
+	if (!email || !senha || !nome) {
+		return res.status(400).json({
+			Erro: 'Para criar um usuario informe: email, senha e nome!',
+		});
+	}
+
+	const validaEmail = await Usuario.exists({ email: email });
+	if (validaEmail) {
+		return res.status(422).json({
+			Erro: 'O email informado já existe. Tente outro!',
+		});
+	}
+
+	const novoUsuario = { email, senha, nome };
+	novoUsuario.senha = bcrypt.hashSync(novoUsuario.senha, 10);
+
+	await new Usuario(novoUsuario)
 		.save()
 		.then((documento) => {
-			documento.password = undefined;
+			documento.senha = undefined;
 			return res.status(201).json(documento);
 		})
 		.catch((error) => {
-			const msg = {};
+			const msgErro = {};
 			if (error.errors) {
 				Object.values(error.errors).forEach(({ properties }) => {
-					msg[properties.path] = properties.message;
+					msgErro[properties.path] = properties.message;
 				});
+				return res.status(500).json(msgErro);
 			}
-			if (error.code == 11000) {
-				msg['erro'] = 'Email já registrado';
-			}
+			// if (error.code == 11000) {
+			// 	msgErro['erro'] = 'O email informado já existe. Tente outro!';
+			// }
 			console.log(error);
-			return res.status(422).json(msg);
+			return res.status(422).json(msgErro);
 		});
 }
 
-async function login(req, res) {
-	const { email, password } = req.body;
-	await Usuario.find({ email: email })
-		.select({ password: -1 })
+async function entrar(req, res) {
+	const { email, senha } = req.body;
+
+	if (!email || !senha) {
+		return res.status(400).json({
+			Erro: 'Para entrar na aplicação informe: email e senha!',
+		});
+	}
+
+	await Usuario.exists({ email: email })
+		.select({ senha: -1 })
 		.then((documento) => {
 			if (!documento) {
-				return res.status(404).json({ Erro: 'Usuário não cadastrado!' });
+				return res.status(422).json({
+					Erro: 'Usuário ou senha inválidos!',
+				});
 			}
-			const autentica = bcrypt.compareSync(password, documento.password);
-			if (!autentica) {
-				return res.status(400).json({ Erro: 'Senha inválida!' });
+
+			const autenticacao = bcrypt.compareSync(senha, documento.senha);
+			if (!autenticacao) {
+				return res.status(422).json({
+					Erro: 'Usuário ou senha inválidos!',
+				});
 			}
-			return res.json({ email: email, token: 'a1b2c3' });
+
+			const segredo = process.env.SEGREDO;
+			const token = jwt.sign({ id: documento._id }, segredo);
+			return res.status(200).json({ Mensagem: 'Autenticação realizada com sucesso!', token });
 		})
 		.catch((error) => {
-			return res.status(500).json(error);
+			return res.status(500).json({ Erro: 'Algo deu errado com a API', error });
 		});
-}
-
-function entrar(req, res) {
-	let loginEntrada = req.body.login;
-	let senhaEntrada = req.body.senha;
-
-	let usuarioEntrada = usuarios.find((value) => value.login === loginEntrada);
-
-	if (!usuarioEntrada) {
-		return res.status(400).json({ Erro: 'Usuário ou senha inválidos!' });
-	} else if (usuarioEntrada.login === loginEntrada && usuarioEntrada.senha === senhaEntrada) {
-		return res.status(200).json({ Mensagem: 'Login efetuado com sucesso!' });
-	} else {
-		return res.status(400).json({ Erro: 'Usuário ou senha inválidos!' });
-	}
 }
 
 module.exports = {
 	boasVindas,
 	entrar,
 	registrar,
-	login,
 };

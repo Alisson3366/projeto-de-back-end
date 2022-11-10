@@ -1,8 +1,5 @@
-const { v4: uuid } = require('uuid');
+// const { v4: uuid } = require('uuid');
 // const { ObjectID } = require('bson');
-
-// const usuariosDados = require('../models/usuarios.json');
-// const usuarios = usuariosDados.usuarios;
 
 const Usuario = require('../models/usuarios.models');
 
@@ -19,10 +16,6 @@ async function verificarLoginUsuario(email) {
 	);
 }
 
-// function consultaUsuarios(req, res) {
-// 	res.status(200).json(usuarios);
-// }
-
 async function consultaUsuarios(req, res) {
 	await Usuario.find({})
 		.then((usuarios) => {
@@ -32,11 +25,6 @@ async function consultaUsuarios(req, res) {
 			return res.status(500).json(error);
 		});
 }
-
-// function consultaUsuarioId(req, res) {
-// 	let usuario = usuarios.find((value) => value.id === req.params.id);
-// 	res.status(200).json(usuario);
-// }
 
 async function consultaUsuarioId(req, res) {
 	await Usuario.findOne({ _id: req.params.id }) // ({ _id: ObjectID(req.params.id) })
@@ -51,36 +39,6 @@ async function consultaUsuarioId(req, res) {
 			return res.status(500).json(error);
 		});
 }
-
-// function criaUsuario(req, res) {
-// 	const { email, senha, nome } = req.body;
-// 	let novoUsuario = {
-// 		id: uuid(),
-// 		email: String(req.body.email).toLowerCase(),
-// 		senha: String(req.body.senha).toLowerCase(),
-// 		nome: String(req.body.nome).toUpperCase(),
-// 		temPet: false,
-// 		pets: [],
-// 	};
-
-// 	if (!email || !senha || !nome) {
-// 		return res.status(400).json({
-// 			Erro: 'Para criar um usuario informe: email, senha e nome!',
-// 		});
-// 	}
-
-// 	// Funcionalidade que verifica se um email e senha já existem
-// 	for (conta of usuarios) {
-// 		if (email === conta.email) {
-// 			return res.status(400).json({
-// 				Erro: 'O email informado já existe. Tente outro!',
-// 			});
-// 		}
-// 	}
-
-// 	usuarios.push(novoUsuario);
-// 	res.status(201).json({ Mensagem: 'Novo usuário criado com sucesso!' });
-// }
 
 async function criaUsuario(req, res) {
 	const { email, senha, nome } = req.body;
@@ -168,12 +126,6 @@ async function atualizaUsuario(req, res) {
 			// status de erro 500 ou 422?
 		});
 }
-
-// function deletaUsuario(req, res) {
-// 	let posicao = usuarios.findIndex((value) => value.id === req.params.id);
-// 	usuarios.splice(posicao, 1);
-// 	res.status(200).json({ Mensagem: 'O usuário foi deletado com sucesso!' });
-// }
 
 async function deletaUsuario(req, res) {
 	await Usuario.findOneAndDelete({ _id: req.params.id }, { runValidators: true }) // ({ _id: ObjectID(req.params.id) })

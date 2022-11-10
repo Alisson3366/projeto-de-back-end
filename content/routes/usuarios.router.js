@@ -1,18 +1,15 @@
 const express = require('express');
-
 const controller = require('../controllers/usuarios.controllers');
 const middleware = require('../middlewares/validacao');
-
 const router = express.Router();
 
+// Rotas Públicas
 router.get('/', controller.consultaUsuarios);
-
-router.get('/:id', middleware.validaIdUsuario, controller.consultaUsuarioId);
-
 router.post('/', controller.criaUsuario);
 
-router.patch('/:id', middleware.validaIdUsuario, controller.atualizaUsuario);
-
-router.delete('/:id', middleware.validaIdUsuario, controller.deletaUsuario);
+// Rotas Privadas
+router.get('/:id', middleware.validaToken, middleware.validaIdUsuario, controller.consultaUsuarioId);
+router.patch('/:id', middleware.validaToken, middleware.validaIdUsuario, controller.atualizaUsuario);
+router.delete('/:id', middleware.validaToken, middleware.validaIdUsuario, controller.deletaUsuario);
 
 module.exports = router;

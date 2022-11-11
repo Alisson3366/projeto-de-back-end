@@ -16,9 +16,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Para adicionarmos informações no cookie, devemos passar o nome dele junto com seu conteúdo nas respostas
-// Exemplo: res.cookie(name_of_cookie, value_of_cookie);
-
 // Declaração dos models utilizados na aplicação (erro -> circular dependencies)
 
 // Declaração das rotas da aplicação
@@ -44,3 +41,18 @@ mongoose
 
 // Exportação de dados e módulos declarados nesse arquivos
 module.exports = app;
+
+// https://docs.insomnia.rest/insomnia/cookie-management
+// https://acervolima.com/cookies-http-em-node-js/
+// Para adicionarmos informações no cookie, devemos passar o nome dele junto com seu conteúdo nas respostas
+// Exemplo: res.cookie(cookie_name, cookie_value)
+// Exemplo cookie expirável: res.cookie(cookie_name, cookie_value, {expire: 600000 + Date.now()});
+// Após salvar as informações no cookie, podemos acessá-las usando -> req.cookie.cookie_name
+// Podemos destruir os cookies usando -> res.clearCookie(cookie_name);
+
+// Rota para destruir o cookie
+// it will clear the userData cookie
+// app.get('/sair', (req, res) => {
+// 	res.clearCookie('userData');
+// 	res.status().json({Mensagem: 'O usuário saiu da aplicação!'});
+// });

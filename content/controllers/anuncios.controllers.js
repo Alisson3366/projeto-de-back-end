@@ -1,8 +1,10 @@
 // const { v4: uuid } = require('uuid');
 // const { ObjectID } = require('bson');
 
+const Usuario = require('../models/usuarios.models');
 const Anuncio = require('../models/anuncios.models');
 
+// ROTAS PÚBLICAS DOS ANÚNCIOS (CONTA DE ADMINISTRADOR)
 async function consultaAnuncios(req, res) {
 	await Anuncio.find({})
 		.then((anuncios) => {
@@ -24,6 +26,25 @@ async function consultaAnuncioId(req, res) {
 		})
 		.catch((error) => {
 			return res.status(500).json(error);
+		});
+}
+
+// ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS ANÚNCIOS
+async function consultaAnunciosUsuario(req, res) {}
+
+async function adicionaAnuncioUsuario(req, res) {
+	const novoAnuncio = new Anuncio(req.body);
+	await novoAnuncio
+		.save()
+		.then((document) => {
+			return res.status(201).json(document);
+		})
+		.catch((error) => {
+			const msgErro = {};
+			Object.values(error.errors).forEach(({ properties }) => {
+				msgErro[properties.path] = properties.message;
+			});
+			return res.status(500).json(msgErro);
 		});
 }
 
@@ -60,12 +81,16 @@ async function consultaAnuncioId(req, res) {
 // 	res.status(201).json({ Mensagem: 'Novo anúncio criado com sucesso!' });
 // }
 
-async function criaAnuncio(req, res) {
-	const novoAnuncio = new Anuncio(req.body);
-	await novoAnuncio
-		.save()
-		.then((document) => {
-			return res.status(201).json(document);
+async function atualizaAnuncioUsuario(req, res) {
+	await Anuncio.findOneAndUpdate({ _id: ObjectID(req.params.id) }, req.body, {
+		runValidators: true,
+	})
+		.then((anuncio) => {
+			if (anuncio) {
+				return res.status(200).json('Anúncio atualizado com sucesso!');
+			} else {
+				return res.status(404).json('Anúncio não encontrado!');
+			}
 		})
 		.catch((error) => {
 			const msgErro = {};
@@ -73,6 +98,7 @@ async function criaAnuncio(req, res) {
 				msgErro[properties.path] = properties.message;
 			});
 			return res.status(500).json(msgErro);
+			// status de erro 500 ou 422?
 		});
 }
 
@@ -96,26 +122,7 @@ async function criaAnuncio(req, res) {
 // 	res.status(200).json({ Mensagem: 'Seu anúncio foi atualizado!' });
 // }
 
-async function atualizaAnuncio(req, res) {
-	await Anuncio.findOneAndUpdate({ _id: ObjectID(req.params.id) }, req.body, { runValidators: true })
-		.then((anuncio) => {
-			if (anuncio) {
-				return res.status(200).json('Anúncio atualizado com sucesso!');
-			} else {
-				return res.status(404).json('Anúncio não encontrado!');
-			}
-		})
-		.catch((error) => {
-			const msgErro = {};
-			Object.values(error.errors).forEach(({ properties }) => {
-				msgErro[properties.path] = properties.message;
-			});
-			return res.status(500).json(msgErro);
-			// status de erro 500 ou 422?
-		});
-}
-
-async function deletaAnuncio(req, res) {
+async function deletaAnuncioUsuario(req, res) {
 	await Anuncio.findOneAndDelete({ _id: ObjectID(req.params.id) }, { runValidators: true })
 		.then((anuncio) => {
 			if (anuncio) {
@@ -132,7 +139,8 @@ async function deletaAnuncio(req, res) {
 module.exports = {
 	consultaAnuncios,
 	consultaAnuncioId,
-	criaAnuncio,
-	atualizaAnuncio,
-	deletaAnuncio,
+	consultaAnunciosUsuario,
+	adicionaAnuncioUsuario,
+	atualizaAnuncioUsuario,
+	deletaAnuncioUsuario,
 };

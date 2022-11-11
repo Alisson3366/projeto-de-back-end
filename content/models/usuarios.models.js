@@ -30,15 +30,6 @@ const usuarioSchema = new mongoose.Schema(
 			trim: true,
 			uppercase: true,
 		},
-		temPet: {
-			type: Boolean,
-			required: true,
-			enum: {
-				values: [true, false],
-				message: 'O sexo deve ser: ambos, fêmea ou macho!',
-			},
-			default: false,
-		},
 		pets: [
 			{
 				type: mongoose.Schema.Types.String,

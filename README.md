@@ -38,6 +38,6 @@ A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no 
 
 ### Requisitos:
 
--   DATABASE_URL = mongodb+srv://alisson3366:336699@thecluster.rf7trvj.mongodb.net/Meu-Amigo-PET?retryWrites=true&w=majority
+-   DATABASE_URL = mongodb+srv://<>:<>@thecluster.rf7trvj.mongodb.net/Meu-Amigo-PET?retryWrites=true&w=majority
 -   PORTA = 8080
 -   SEGREDO = JACAREDECAPACETE

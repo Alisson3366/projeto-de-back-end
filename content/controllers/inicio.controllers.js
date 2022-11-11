@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.models');
 
-function boasVindas(req, res, next) {
+function boasVindas(req, res) {
 	res.status(200).json({
 		Mensagem: `Bem vindos ao Meu Amigo PET!`,
 	});
@@ -63,14 +63,14 @@ async function entrar(req, res) {
 		.then((documento) => {
 			if (!documento) {
 				return res.status(422).json({
-					Erro: 'Usuário ou senha inválidos!',
+					Erro: 'Email ou senha inválidos!',
 				});
 			}
 
 			const autenticacao = bcrypt.compare(senha, documento.senha);
 			if (!autenticacao) {
 				return res.status(422).json({
-					Erro: 'Usuário ou senha inválidos!',
+					Erro: 'Email ou senha inválidos!',
 				});
 			}
 

@@ -1,5 +1,21 @@
+const { v4: uuid } = require('uuid');
 const { validate: isUuid } = require('uuid');
-const jwt = require('jsonwebtoken');
+
+const anunciosDados = require('../models/anuncios.json');
+const usuariosDados = require('../models/usuarios.json');
+const anuncios = anunciosDados.anuncios;
+const usuarios = usuariosDados.usuarios;
+
+function criaId() {
+	usuarios.forEach((usuario) => {
+		usuario.id = uuid();
+	});
+	anuncios.forEach((anuncio) => {
+		anuncio.id = uuid();
+	});
+}
+
+criaId();
 
 function validaIdUsuario(req, res, next) {
 	const index = req.params.id;
@@ -41,26 +57,8 @@ function validaIdAnuncio(req, res, next) {
 	next();
 }
 
-function validaToken(req, res, next) {
-	const autenticacao = req.headers['authorization'];
-	const token = autenticacao && autenticacao.split('')[1];
-	// O .headers['authorization'] retorna algo assim 'Bearer US$%asd@#$'
-
-	if (!token) {
-		return res.status(401).json({ Erro: 'Acesso negado!' });
-	}
-
-	try {
-		const segredo = process.env.SEGREDO;
-		const tokenValidado = jwt.verify(token, segredo);
-		next();
-	} catch (error) {
-		return res.status(400).json({ Erro: 'Token inválido!' });
-	}
-}
-
 module.exports = {
 	validaIdUsuario,
 	validaIdAnuncio,
-	validaToken,
+	criaId,
 };

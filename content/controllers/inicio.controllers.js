@@ -67,7 +67,7 @@ async function entrar(req, res) {
 				});
 			}
 
-			const autenticacao = bcrypt.compareSync(senha, documento.senha);
+			const autenticacao = bcrypt.compare(senha, documento.senha);
 			if (!autenticacao) {
 				return res.status(422).json({
 					Erro: 'Usuário ou senha inválidos!',
@@ -79,7 +79,7 @@ async function entrar(req, res) {
 			return res.status(200).json({ Mensagem: 'Autenticação realizada com sucesso!', token });
 		})
 		.catch((error) => {
-			return res.status(500).json({ Erro: 'Algo deu errado com a API', error });
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 

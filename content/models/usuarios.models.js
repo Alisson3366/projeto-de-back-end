@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
 const { petSchema } = require('../models/pets.models');
+const Anuncio = require('../models/anuncios.models');
 
 const usuarioSchema = new mongoose.Schema(
 	{
@@ -49,7 +50,7 @@ const usuarioSchema = new mongoose.Schema(
 	}
 );
 
-const usuarioModel = mongoose.model('Usuario', usuarioSchema);
+module.exports = mongoose.model('Usuario', usuarioSchema);
 
 // usuarioSchema.methods.digaOi = function () {
 // 	console.log(`Oi, meu nome é ${this.nome}!`);
@@ -78,5 +79,3 @@ const usuarioModel = mongoose.model('Usuario', usuarioSchema);
 // 	doc.digaOi();
 // 	next();
 // }); //será executado após salvar
-
-module.exports = usuarioModel;

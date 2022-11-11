@@ -3,19 +3,6 @@
 
 const Usuario = require('../models/usuarios.models');
 
-async function verificarLoginUsuario(email) {
-	await Usuario.findOne({ email: email }).then(
-		(usuario) => {
-			if (usuario) {
-				return true;
-			} else {
-				return false;
-			}
-		},
-		() => false
-	);
-}
-
 async function consultaUsuarios(req, res) {
 	await Usuario.find({})
 		.then((usuarios) => {

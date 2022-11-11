@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
+const { petSchema } = require('../models/pets.models');
 const Usuario = require('../models/usuarios.models');
 
 const anuncioSchema = new mongoose.Schema(
@@ -14,7 +15,7 @@ const anuncioSchema = new mongoose.Schema(
 			type: String,
 			required: [true, 'O proprietario do anúncio é obrigatório!'],
 			trim: true,
-			default: Usuario._id,
+			// default: Usuario._id,
 		},
 		tipo: {
 			type: String,
@@ -59,6 +60,4 @@ const anuncioSchema = new mongoose.Schema(
 	}
 );
 
-const anuncioModel = mongoose.model('Anuncio', anuncioSchema);
-
-module.exports = anuncioModel;
+module.exports = mongoose.model('Anuncio', anuncioSchema);

@@ -67,7 +67,7 @@ async function entrar(req, res) {
 				});
 			}
 
-			const autenticacao = bcrypt.compare(senha, documento.senha);
+			const autenticacao = bcrypt.compareSync(senha, documento.senha);
 			if (!autenticacao) {
 				return res.status(422).json({
 					Erro: 'Email ou senha inválidos!',
@@ -75,7 +75,7 @@ async function entrar(req, res) {
 			}
 
 			const segredo = process.env.SEGREDO;
-			const token = jwt.sign({ id: documento._id }, segredo);
+			const token = jwt.sign({ id: documento._id }, segredo, { expiresIn: 600 });
 			return res.status(200).json({ Mensagem: 'Autenticação realizada com sucesso!', token });
 		})
 		.catch((error) => {

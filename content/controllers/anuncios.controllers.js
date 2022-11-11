@@ -1,14 +1,7 @@
 // const { v4: uuid } = require('uuid');
-const { ObjectID } = require('bson');
-
-// const anunciosDados = require('../models/anuncios.json');
-// const anuncios = anunciosDados.anuncios;
+// const { ObjectID } = require('bson');
 
 const Anuncio = require('../models/anuncios.models');
-
-// function consultaAnuncios(req, res) {
-// 	res.status(200).json(anuncios);
-// }
 
 async function consultaAnuncios(req, res) {
 	await Anuncio.find({})
@@ -20,13 +13,8 @@ async function consultaAnuncios(req, res) {
 		});
 }
 
-// function consultaAnuncioId(req, res) {
-// 	let anuncio = anuncios.find((value) => value.id === req.params.id);
-// 	res.status(200).json(anuncio);
-// }
-
 async function consultaAnuncioId(req, res) {
-	await Anuncio.findOne({ _id: ObjectID(req.params.id) })
+	await Anuncio.findOne({ _id: req.params.id }) //{ _id: ObjectID(req.params.id) }
 		.then((anuncio) => {
 			if (anuncio) {
 				return res.status(200).json(anuncio);

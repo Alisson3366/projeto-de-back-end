@@ -47,10 +47,9 @@ const anuncioSchema = new mongoose.Schema(
 		quantidade: {
 			type: Number,
 			required: false,
-			// required: () => {
-			// 	return this.tipo === 'adoção';
-			// 	// Se o tipo for adoção, então a quantidade será obrigatória.
-			// },
+			required: () => {
+				return this.tipo === 'adoção';
+			},
 			min: 1,
 		},
 	},

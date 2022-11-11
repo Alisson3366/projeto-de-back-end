@@ -128,23 +128,6 @@ async function deletaUsuario(req, res) {
 		});
 }
 
-// {
-//     "pets": [
-//         {
-//             "id": 1,
-//             "nome": "July",
-//             "sexo": "femea",
-//             "raca": "SRD"
-//         },
-//         {
-//             "id": 2,
-//             "nome": "Lisa",
-//             "sexo": "femea",
-//             "raca": "West Highland"
-//         }
-//     ]
-// }
-
 module.exports = {
 	consultaUsuarios,
 	consultaUsuarioId,

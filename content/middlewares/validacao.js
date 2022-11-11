@@ -2,6 +2,7 @@ const { validate: isUuid } = require('uuid');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.models');
 const Anuncio = require('../models/anuncios.models');
+const Pet = require('../models/pets.models');
 
 async function validaIdUsuario(req, res, next) {
 	const index = req.params.id;
@@ -33,8 +34,29 @@ async function validaIdAnuncio(req, res, next) {
 
 	try {
 		const itemAnuncio = await Anuncio.find({ _id: req.params.id });
-		// res.anuncio = itemAnuncio;
+		res.anuncio = itemAnuncio;
 		if (!itemAnuncio) {
+			return res.status(404).json({ Erro: 'ID não encontrado!' });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
+	}
+
+	next();
+}
+
+async function validaIdPet(req, res, next) {
+	const index = req.params.id;
+
+	if (!isUuid(index)) {
+		return res.status(400).json({ Erro: 'ID inválido!' });
+	}
+
+	try {
+		const itemPet = await Pet.find({ _id: req.params.id });
+		res.pet = itemPet;
+		if (!itemPet) {
 			return res.status(404).json({ Erro: 'ID não encontrado!' });
 		}
 	} catch (error) {
@@ -70,7 +92,7 @@ function validaToken(req, res, next) {
 			if (error) {
 				return res.status(401).json({ Erro: 'Token inválido. Acesso negado!' });
 			}
-			// req.body.id = documento._id;
+			req.body.id = documento._id;
 		});
 
 		next();
@@ -82,5 +104,6 @@ function validaToken(req, res, next) {
 module.exports = {
 	validaIdUsuario,
 	validaIdAnuncio,
+	validaIdPet,
 	validaToken,
 };

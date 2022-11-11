@@ -83,8 +83,11 @@ async function entrar(req, res) {
 		});
 }
 
+async function sair(req, res) {}
+
 module.exports = {
 	boasVindas,
-	entrar,
 	registrar,
+	entrar,
+	sair,
 };

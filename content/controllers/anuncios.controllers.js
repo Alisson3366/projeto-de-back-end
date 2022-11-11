@@ -115,12 +115,6 @@ async function atualizaAnuncio(req, res) {
 		});
 }
 
-// function deletaAnuncio(req, res) {
-// 	let posicao = anuncios.findIndex((value) => value.id === req.params.id);
-// 	anuncios.splice(posicao, 1);
-// 	res.status(200).json({ Mensagem: 'Seu anuncio foi deletado com sucesso!' });
-// }
-
 async function deletaAnuncio(req, res) {
 	await Anuncio.findOneAndDelete({ _id: ObjectID(req.params.id) }, { runValidators: true })
 		.then((anuncio) => {

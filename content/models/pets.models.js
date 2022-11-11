@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
-// const { usuarioModel } = require('../models/usuarios.models');
+const usuariosModels = require('../models/usuarios.models');
+const Usuario = require('../models/usuarios.models');
 
 const petSchema = new mongoose.Schema(
 	{
@@ -10,12 +11,10 @@ const petSchema = new mongoose.Schema(
 			immutable: true,
 			default: uuid(),
 		},
-		// proprietario: {
-		// 	type: String,
-		// 	required: [true, 'O proprietario do pet é obrigatório!'],
-		// 	trim: true,
-		// 	default: usuarioModel,
-		// },
+		donoPet: {
+			type: mongoose.Schema.Types.String,
+			ref: 'Usuario',
+		},
 		nome: {
 			type: String,
 			required: [true, 'O nome do pet é obrigatório!'],
@@ -42,6 +41,4 @@ const petSchema = new mongoose.Schema(
 	}
 );
 
-const petModel = mongoose.model('Pet', petSchema);
-
-module.exports = { petModel, petSchema };
+module.exports = mongoose.model('Pet', petSchema);

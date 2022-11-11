@@ -3,14 +3,17 @@ const controller = require('../controllers/usuarios.controllers');
 const middleware = require('../middlewares/validacao');
 const router = express.Router();
 
-// Rotas Públicas
+// ROTAS PÚBLICAS
 router.route('/usuarios').get(controller.consultaUsuarios).post(controller.criaUsuario);
 
-// Rotas Privadas
+// ROTAS PRIVADAS RELATIVAS AO PRÓPRIO USUÁRIO
 router
 	.route('/usuarios/:id')
+	// GET /usuarios/:id_U -> Permite que o usuário logado consulte seus próprios dados
 	.get(middleware.validaToken, middleware.validaIdUsuario, controller.consultaUsuarioId)
+	// PATCH /usuarios/:id_U -> Permite que o usuário logado atualize seus próprios dados
 	.patch(middleware.validaToken, middleware.validaIdUsuario, controller.atualizaUsuario)
+	// DELETE /usuarios/:id_U -> Permite que o usuário logado detele sua própria conta
 	.delete(middleware.validaToken, middleware.validaIdUsuario, controller.deletaUsuario);
 
 // ROTAS PRIVADAS RELATIVAS AO PRÓPRIO USUÁRIO

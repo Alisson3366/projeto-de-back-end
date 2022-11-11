@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
-const { petSchema } = require('../models/pets.models');
+const usuariosModels = require('../models/usuarios.models');
 const Usuario = require('../models/usuarios.models');
 
 const anuncioSchema = new mongoose.Schema(
@@ -11,11 +11,9 @@ const anuncioSchema = new mongoose.Schema(
 			immutable: true,
 			default: uuid(),
 		},
-		proprietario: {
-			type: String,
-			required: [true, 'O proprietario do anúncio é obrigatório!'],
-			trim: true,
-			// default: Usuario._id,
+		donoAnuncio: {
+			type: mongoose.Schema.Types.String,
+			ref: 'Usuario',
 		},
 		tipo: {
 			type: String,
@@ -48,10 +46,11 @@ const anuncioSchema = new mongoose.Schema(
 		},
 		quantidade: {
 			type: Number,
-			required: () => {
-				return this.tipo === 'adoção';
-				// Se o tipo for adoção, então a quantidade será obrigatória.
-			},
+			required: false,
+			// required: () => {
+			// 	return this.tipo === 'adoção';
+			// 	// Se o tipo for adoção, então a quantidade será obrigatória.
+			// },
 			min: 1,
 		},
 	},

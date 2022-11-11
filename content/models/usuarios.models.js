@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
-const { petSchema } = require('../models/pets.models');
+const Pet = require('../models/pets.models');
 const Anuncio = require('../models/anuncios.models');
 
 const usuarioSchema = new mongoose.Schema(
@@ -39,11 +39,18 @@ const usuarioSchema = new mongoose.Schema(
 			},
 			default: false,
 		},
-		pets: [petSchema], // SUBDOCUMENTS
-		// pets: { // POPULATE
-		// 	type: mongoose.SchemaTypes.String,
-		// 	ref: 'Pet',
-		// },
+		pets: [
+			{
+				type: mongoose.Schema.Types.String,
+				ref: 'Pet',
+			},
+		],
+		anuncios: [
+			{
+				type: mongoose.Schema.Types.String,
+				ref: 'Anuncio',
+			},
+		],
 	},
 	{
 		timestamps: true,

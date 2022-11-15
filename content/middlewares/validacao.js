@@ -8,14 +8,14 @@ async function validaIdUsuario(req, res, next) {
 	const index = req.params.id;
 
 	if (!isUuid(index)) {
-		return res.status(400).json({ Erro: 'ID inválido!' });
+		return res.status(400).json({ Erro: 'ID de usuário inválido!' });
 	}
 
 	try {
 		const itemUsuario = await Usuario.find({ _id: req.params.id });
 		res.usuario = itemUsuario;
 		if (!itemUsuario) {
-			return res.status(404).json({ Erro: 'ID não encontrado!' });
+			return res.status(404).json({ Erro: 'ID de usuário não encontrado!' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -29,14 +29,14 @@ async function validaIdAnuncio(req, res, next) {
 	const index = req.params.id;
 
 	if (!isUuid(index)) {
-		return res.status(400).json({ Erro: 'ID inválido!' });
+		return res.status(400).json({ Erro: 'ID de anúncio inválido!' });
 	}
 
 	try {
 		const itemAnuncio = await Anuncio.find({ _id: req.params.id });
 		res.anuncio = itemAnuncio;
 		if (!itemAnuncio) {
-			return res.status(404).json({ Erro: 'ID não encontrado!' });
+			return res.status(404).json({ Erro: 'ID de anúncio não encontrado!' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -50,14 +50,14 @@ async function validaIdPet(req, res, next) {
 	const index = req.params.id;
 
 	if (!isUuid(index)) {
-		return res.status(400).json({ Erro: 'ID inválido!' });
+		return res.status(400).json({ Erro: 'ID de pet inválido!' });
 	}
 
 	try {
 		const itemPet = await Pet.find({ _id: req.params.id });
 		res.pet = itemPet;
 		if (!itemPet) {
-			return res.status(404).json({ Erro: 'ID não encontrado!' });
+			return res.status(404).json({ Erro: 'ID de pet não encontrado!' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -72,14 +72,16 @@ function validaToken(req, res, next) {
 	// O .headers['authorization'] retorna algo assim 'Bearer US$%asd@#$'
 	// const token = authorization && authorization.split('')[1];
 
-	const { authorization } = req.headers;
+	const token = req.cookies.tokenUsuario;
 
-	if (!authorization) {
-		return res.status(401).json({ Erro: 'Token não informado. Acesso negado!' });
-	}
+	// const { authorization } = req.headers;
 
-	const [tipo, token] = authorization.split(' ');
-	// O tipo recebe 'Bearer' e token recebe o hash ('Bearer US$%asd@#$')
+	// if (!authorization) {
+	// 	return res.status(401).json({ Erro: 'Token não informado. Acesso negado!' });
+	// }
+
+	// const [tipo, token] = authorization.split(' ');
+	// // O tipo recebe 'Bearer' e token recebe o hash ('Bearer US$%asd@#$')
 
 	if (!token) {
 		return res.status(401).json({ Erro: 'Token não informado. Acesso negado!' });

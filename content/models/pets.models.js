@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
-const usuariosModels = require('../models/usuarios.models');
-const Usuario = require('../models/usuarios.models');
 
 const petSchema = new mongoose.Schema(
 	{
@@ -14,16 +12,20 @@ const petSchema = new mongoose.Schema(
 		donoPet: {
 			type: mongoose.Schema.Types.String,
 			ref: 'Usuario',
+			required: true,
+			immutable: true,
 		},
 		nome: {
 			type: String,
 			required: [true, 'O nome do pet é obrigatório!'],
 			trim: true,
+			uppercase: true,
 		},
 		sexo: {
 			type: String,
 			required: true,
 			trim: true,
+			lowercase: true,
 			enum: {
 				values: ['fêmea', 'macho'],
 				message: 'O sexo do pet deve ser: fêmea ou macho!',
@@ -31,9 +33,10 @@ const petSchema = new mongoose.Schema(
 		},
 		raca: {
 			type: String,
-			required: [true, 'A raça do pet é obrigatória!'],
+			required: false,
 			trim: true,
-			default: 'SRD',
+			lowercase: true,
+			default: 'srd',
 		},
 	},
 	{

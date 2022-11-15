@@ -1,6 +1,4 @@
-// const { v4: uuid } = require('uuid');
-// const { ObjectID } = require('bson');
-
+const bcrypt = require('bcryptjs');
 const Usuario = require('../models/usuarios.models');
 
 async function consultaUsuarios(req, res) {
@@ -9,99 +7,57 @@ async function consultaUsuarios(req, res) {
 			return res.status(200).json(usuarios);
 		})
 		.catch((error) => {
-			return res.status(500).json(error);
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 
 async function consultaUsuarioId(req, res) {
-	await Usuario.findOne({ _id: req.params.id }) // ({ _id: ObjectID(req.params.id) })
-		.then((usuario) => {
-			if (usuario) {
-				return res.status(200).json(usuario);
-			} else {
-				return res.status(404).json('Usuário não localizado!');
-			}
-		})
-		.catch((error) => {
-			return res.status(500).json(error);
-		});
+	if (req.params.id !== req.cookies.idUsuario) {
+		return res.status(404).json({ Erro: 'O ID informado é diferente do usuário logado!' });
+	} else {
+		await Usuario.findOne({ _id: req.cookies.idUsuario })
+			// .select('+senha')
+			.then((usuario) => {
+				if (usuario) {
+					return res.status(200).json(usuario);
+				} else {
+					return res.status(404).json({ Erro: 'Usuário não localizado!' });
+				}
+			})
+			.catch((error) => {
+				return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
+			});
+	}
 }
 
-async function criaUsuario(req, res) {
+async function atualizaUsuario(req, res) {
 	const { email, senha, nome } = req.body;
-	let novoUsuario = { email, senha, nome };
 
-	// Verificação para criação de um novo usuário
-	if (!email || !senha || !nome) {
+	if (!email && !senha && !nome) {
 		return res.status(400).json({
-			Erro: 'Para criar um usuario informe: email, senha e nome!',
+			Erro: 'Informe pelo menos uma informação para alterar o usuário: email, senha ou nome!',
 		});
 	}
 
-	// Funcionalidade que verifica se um email e senha já existem
-	await Usuario.exists({ email: email }).then((usuario) => {
-		// verificar se o await é necessário
-		if (usuario) {
-			console.log('Bosta');
-			return res.status(400).json({
-				Erro: 'O email informado já existe. Tente outro!',
-			});
-		} else {
-			console.log('Merda');
-			return novoUsuario;
-		}
-	});
-	// .then(async () => {});
-
-	await new Usuario(novoUsuario)
-		.save({ runValidators: true })
-		.then((document) => {
-			return res.status(201).json(document);
-		})
-		.catch((error) => {
-			const msgErro = {};
-			Object.values(error.errors).forEach(({ properties }) => {
-				msgErro[properties.path] = properties.message;
-			});
-			return res.status(500).json(msgErro);
+	const validaEmail = await Usuario.exists({ email: email });
+	if (validaEmail) {
+		return res.status(422).json({
+			Erro: 'O email informado já existe. Tente outro!',
 		});
-	//!!!!!! PROBLEMA método .save() não está sendo reconhecido
-	// funciona quando utilizamos await new Usuario
-}
+	}
 
-// function atualizaUsuario(req, res) {
-// 	let usuario = usuarios.find((value) => value.id === req.params.id);
-// 	const { email, senha, nome } = req.body;
-// 	if (!email && !senha && !nome) {
-// 		return res.status(400).json({
-// 			Erro: 'Informe pelo menos uma informação para alterar o usuário: email, senha ou nome!',
-// 		});
-// 	}
+	const novoUsuario = { email, senha, nome };
 
-// 	// Funcionalidade que verifica se um email já existe
-// 	for (let conta of usuarios) {
-// 		if (email === conta.email) {
-// 			return res.status(400).json({
-// 				Erro: 'O email informado já existe. Tente outro!',
-// 			});
-// 		}
-// 	}
+	if (senha) {
+		novoUsuario.senha = bcrypt.hashSync(novoUsuario.senha, 10);
+	}
 
-// 	if (email) usuario.email = String(req.body.email).toLowerCase();
-// 	if (senha) usuario.senha = String(req.body.senha).toLowerCase();
-// 	if (nome) usuario.nome = String(req.body.nome).toLowerCase();
-// 	res.status(200).json({ Mensagem: 'O usuário foi atualizado!' });
-// }
-
-async function atualizaUsuario(req, res) {
-	// await Usuario.find().save()
-	// Não utilizar uptade
-	await Usuario.findOneAndUpdate({ _id: req.params.id }, req.body, { runValidators: true }) // ({ _id: ObjectID(req.params.id) })
-		.then((usuario) => {
-			if (usuario) {
-				return res.status(200).json('Usuário atualizado com sucesso!');
+	await Usuario.findOneAndUpdate({ _id: req.params.id }, novoUsuario, { runValidators: true })
+		.then((documento) => {
+			if (documento) {
+				return res.status(200).json({ Mensagem: 'Usuário atualizado com sucesso!' });
 			} else {
-				return res.status(404).json('Usuário não encontrado!');
+				return res.status(404).json({ Erro: 'Usuário não localizado!' });
 			}
 		})
 		.catch((error) => {
@@ -110,28 +66,30 @@ async function atualizaUsuario(req, res) {
 				msgErro[properties.path] = properties.message;
 			});
 			return res.status(500).json(msgErro);
-			// status de erro 500 ou 422?
 		});
 }
 
 async function deletaUsuario(req, res) {
-	await Usuario.findOneAndDelete({ _id: req.params.id }, { runValidators: true }) // ({ _id: ObjectID(req.params.id) })
-		.then((usuario) => {
-			if (usuario) {
-				return res.status(200).json('Usuário deletado com sucesso!');
+	await Usuario.deleteOne({ _id: req.params.id })
+		.then((documento) => {
+			if (documento) {
+				return res.status(200).json({ Mensagem: 'Usuário deletado com sucesso!' });
+				// return res.redirect('/');
 			} else {
-				return res.status(404).json('Usuário não encontrado!');
+				return res.status(404).json({ Erro: 'Usuário não localizado!' });
 			}
 		})
 		.catch((error) => {
-			return res.status(500).json(error);
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
+
+// ErrorCaptureStackTrace(err)
+// Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
 
 module.exports = {
 	consultaUsuarios,
 	consultaUsuarioId,
-	criaUsuario,
 	atualizaUsuario,
 	deletaUsuario,
 };

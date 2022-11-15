@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
-const Pet = require('../models/pets.models');
-const Anuncio = require('../models/anuncios.models');
 
 const usuarioSchema = new mongoose.Schema(
 	{

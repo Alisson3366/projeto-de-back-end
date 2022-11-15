@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
-const usuariosModels = require('../models/usuarios.models');
-const Usuario = require('../models/usuarios.models');
 
 const anuncioSchema = new mongoose.Schema(
 	{
@@ -14,39 +12,44 @@ const anuncioSchema = new mongoose.Schema(
 		donoAnuncio: {
 			type: mongoose.Schema.Types.String,
 			ref: 'Usuario',
+			required: true,
+			immutable: true,
 		},
 		tipo: {
 			type: String,
 			required: [true, 'O tipo do anúncio é obrigatório!'],
 			trim: true,
+			lowercase: true,
 			enum: {
 				values: ['adoção', 'cruzamento'],
-				message: 'O tipo deve ser: adoção ou cruzamento!',
+				message: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
 			},
 		},
 		titulo: {
 			type: String,
 			required: [true, 'O título do anúncio é obrigatório!'],
 			trim: true,
+			uppercase: true,
 		},
 		sexo: {
 			type: String,
 			required: true,
 			trim: true,
+			lowercase: true,
 			enum: {
 				values: ['ambos', 'fêmea', 'macho'],
-				message: 'O sexo deve ser: ambos, fêmea ou macho!',
+				message: 'O sexo deve ser: fêmea, macho ou ambos (em caso de adoção)!',
 			},
 		},
 		raca: {
 			type: String,
-			required: [true, 'A raça do animal é obrigatória!'],
+			required: false,
 			trim: true,
-			default: 'SRD',
+			lowercase: true,
+			default: 'srd',
 		},
 		quantidade: {
 			type: Number,
-			required: false,
 			required: () => {
 				return this.tipo === 'adoção';
 			},

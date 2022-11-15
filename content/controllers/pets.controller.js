@@ -1,16 +1,46 @@
-// const { v4: uuid } = require('uuid');
-// const { ObjectID } = require('bson');
-
 const Usuario = require('../models/usuarios.models');
 const Pet = require('../models/pets.models');
 
 // ROTAS PÚBLICAS DOS PETS (CONTA DE ADMINISTRADOR)
-async function consultaPets(req, res) {}
+async function consultaPets(req, res) {
+	await Pet.find({})
+		.then((pets) => {
+			return res.status(200).json(pets);
+		})
+		.catch((error) => {
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
+		});
+}
 
-async function consultaPetId(req, res) {}
+async function consultaPetId(req, res) {
+	await Pet.findOne({ _id: req.params.id })
+		.then((pets) => {
+			if (pets) {
+				return res.status(200).json(pets);
+			} else {
+				return res.status(404).json({ Erro: 'Pet não localizado!' });
+			}
+		})
+		.catch((error) => {
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
+		});
+}
 
 // ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS PETS
-async function consultaPetsUsuario(req, res) {}
+async function consultaPetsUsuario(req, res) {
+	await Usuario.findOne({ _id: req.cookies.idUsuario })
+		.populate('pets')
+		.then((usuario) => {
+			if (usuario) {
+				return res.status(200).json(usuario.$getPopulatedDocs());
+			} else {
+				return res.status(404).json({ Erro: 'Usuário não localizado!' });
+			}
+		})
+		.catch((error) => {
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
+		});
+}
 
 async function adicionaPetUsuario(req, res) {
 	const { nome, sexo, raca } = req.body;
@@ -18,18 +48,20 @@ async function adicionaPetUsuario(req, res) {
 	// Verificação para criação de um novo pet
 	if (!nome || !sexo) {
 		return res.status(400).json({
-			Erro: 'Para adicionar um pet informe pelo menos: nome e sexo!',
+			Erro: 'Para adicionar um pet informe: nome, sexo e raca (opcional)!',
 		});
 	}
 
-	// req.body.id está armazenando o _id do usuário cujo token está acessando as rotas
-	const novoPet = { nome, sexo, raca, donoPet: req.body.id };
+	// req.cookies.idUsuario está armazenando o _id do usuário cujo token está acessando as rotas
+	const novoPet = { nome, sexo, raca, donoPet: req.cookies.idUsuario };
+	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
+
 	await new Pet(novoPet)
 		.save()
 		.then((documento) => {
-			return res
-				.status(201)
-				.json({ Mensagem: 'Novo pet adicionado com sucesso!', Pet: documento });
+			novoUsuario.pets.push(documento);
+			novoUsuario.save();
+			return res.status(201).json({ Mensagem: 'Pet adicionado com sucesso!' });
 		})
 		.catch((error) => {
 			const msgErro = {};
@@ -42,44 +74,25 @@ async function adicionaPetUsuario(req, res) {
 			console.log(error);
 			return res.status(422).json(msgErro);
 		});
-
-	// await Usuario.findOneAndUpdate({ _id: req.params.id })
-	// 	.then((usuario) => {
-	// 		if (usuario) {
-	// 			// usuario.temPet = true;
-	// 			usuario.pets.push(novoPet);
-	// 			return res.status(200).json('Pet adicionado ao usuário com sucesso!');
-	// 		} else {
-	// 			return res.status(404).json('Usuário não encontrado!');
-	// 		}
-	// 	})
-	// 	.catch((error) => {
-	// 		const msgErro = {};
-	// 		Object.values(error.errors).forEach(({ properties }) => {
-	// 			msgErro[properties.path] = properties.message;
-	// 		});
-	// 		return res.status(500).json(msgErro);
-	// 		// status de erro 500 ou 422?
-	// 	});
 }
 
-async function atualizaPetUsuario(req, res) {}
+async function atualizaPetUsuario(req, res) {
+	const { nome, sexo, raca } = req.body;
 
-async function deletaPetUsuario(req, res) {
-	await Usuario.findOneAndUpdate({ _id: req.params.id })
-		.then((usuario) => {
-			if (usuario) {
-				if (usuario.temPet != false) {
-					let pet = usuario.pets.find((value) => {
-						value._id === req.body._id;
-					});
-					usuario.pets.splice(indexOf(pet), 1);
-					return res.status(200).json('Pet deletado do usuário com sucesso!');
-				} else {
-					return res.status(400).json('O usuário não possui pets!');
-				}
+	if (!nome && !sexo && !raca) {
+		return res.status(400).json({
+			Erro: 'Informe pelo menos uma informação para alterar o pet: nome, sexo ou raça!',
+		});
+	}
+
+	const novoPet = { nome, sexo, raca };
+
+	await Pet.findOneAndUpdate({ _id: req.params.id }, novoPet, { runValidators: true })
+		.then((documento) => {
+			if (documento) {
+				return res.status(200).json({ Mensagem: 'Pet atualizado com sucesso!' });
 			} else {
-				return res.status(404).json('Usuário não encontrado!');
+				return res.status(404).json({ Erro: 'Pet não localizado!' });
 			}
 		})
 		.catch((error) => {
@@ -88,7 +101,25 @@ async function deletaPetUsuario(req, res) {
 				msgErro[properties.path] = properties.message;
 			});
 			return res.status(500).json(msgErro);
-			// status de erro 500 ou 422?
+		});
+}
+
+async function deletaPetUsuario(req, res) {
+	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
+	const posicao = novoUsuario.pets.indexOf(String(req.params.id));
+	novoUsuario.pets.splice(posicao, 1);
+	novoUsuario.save();
+
+	await Pet.deleteOne({ _id: req.params.id })
+		.then((documento) => {
+			if (documento) {
+				return res.status(200).json({ Mensagem: 'Pet deletado do usuário com sucesso!' });
+			} else {
+				return res.status(404).json({ Erro: 'Pet não localizado!' });
+			}
+		})
+		.catch((error) => {
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 

@@ -5,8 +5,8 @@ const router = express.Router();
 
 // ROTAS PÚBLICAS DOS PETS (CONTA DE ADMINISTRADOR)
 router
-	// GET /pet/ -> Permite que qualquer pessoa consulte todos os pets FIXME:
-	.route('/pet')
+	// GET /pets/ -> Permite que qualquer pessoa consulte todos os pets
+	.route('/pets')
 	.get(petsCTRL.consultaPets);
 
 router
@@ -16,19 +16,17 @@ router
 
 // ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS PETS
 router
-	// GET /usuarios/pets/ -> Permite que o usuário logado consulte seus próprios pets
-	// POST /usuarios/pets/ -> Permite que o usuário logado adicione um novo pet
-	.route('/usuarios/pets/')
+	// GET /pets/usuario/ -> Permite que o usuário logado consulte seus próprios pets
+	// POST /pets/usuario/ -> Permite que o usuário logado adicione um novo pet
+	.route('/pets/usuario')
 	.get(middleware.validaToken, petsCTRL.consultaPetsUsuario)
 	.post(middleware.validaToken, petsCTRL.adicionaPetUsuario);
 
 router
-	// PATCH /usuarios/pets/:id_P -> Permite que o usuário logado atualize um de seus pets
-	// DELETE /usuarios/pets/:id_P -> Permite que o usuário logado detele um de seus pets
-	.route('/usuarios/pets/:id')
+	// PATCH /pet/usuario/:id_P -> Permite que o usuário logado atualize um de seus pets
+	// DELETE /pet/usuario/:id_P -> Permite que o usuário logado detele um de seus pets
+	.route('/pet/usuario/:id')
 	.patch(middleware.validaToken, middleware.validaIdPet, petsCTRL.atualizaPetUsuario)
 	.delete(middleware.validaToken, middleware.validaIdPet, petsCTRL.deletaPetUsuario);
-
-//FIXME: Criar as funções restantes do arquivo pets.controller.js e testa-las
 
 module.exports = router;

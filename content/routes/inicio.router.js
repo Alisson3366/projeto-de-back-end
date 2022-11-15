@@ -22,11 +22,4 @@ router
 	.route('/sair')
 	.get(inicioCTRL.sair);
 
-// Rota para destruir o cookie
-// it will clear the userData cookie
-// app.get('/sair', (req, res) => {
-// 	res.clearCookie('userData');
-// 	res.status().json({Mensagem: 'O usuário saiu da aplicação!'});
-// });
-
 module.exports = router;

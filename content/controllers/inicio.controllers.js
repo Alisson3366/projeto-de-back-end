@@ -31,7 +31,7 @@ async function registrar(req, res) {
 		.save()
 		.then((documento) => {
 			documento.senha = undefined;
-			return res.status(201).json(documento);
+			return res.status(201).json({ Mensagem: 'Novo usuário registrado com sucesso!', Usuario: documento });
 		})
 		.catch((error) => {
 			const msgErro = {};
@@ -42,7 +42,7 @@ async function registrar(req, res) {
 				return res.status(500).json(msgErro);
 			}
 			// if (error.code == 11000) {
-			// 	msgErro['erro'] = 'O email informado já existe. Tente outro!';
+			// 	msgErro['Erro'] = 'O email informado já existe. Tente outro!';
 			// }
 			console.log(error);
 			return res.status(422).json(msgErro);
@@ -76,6 +76,11 @@ async function entrar(req, res) {
 
 			const segredo = process.env.SEGREDO;
 			const token = jwt.sign({ id: documento._id }, segredo, { expiresIn: 600 });
+			const idUsuario = documento._id;
+
+			res.cookie('idUsuario', idUsuario, { maxAge: 600000, httpOnly: true });
+			res.cookie('tokenUsuario', token, { maxAge: 600000, httpOnly: true });
+
 			return res.status(200).json({ Mensagem: 'Autenticação realizada com sucesso!', token });
 		})
 		.catch((error) => {
@@ -83,7 +88,11 @@ async function entrar(req, res) {
 		});
 }
 
-async function sair(req, res) {}
+async function sair(req, res) {
+	res.clearCookie('idUsuario', { path: '/', domain: 'localhost' });
+	res.clearCookie('tokenUsuario', { path: '/', domain: 'localhost' });
+	res.status(200).json({ Mensagem: 'Usuário desconectou-se da aplicação com sucesso!' });
+}
 
 module.exports = {
 	boasVindas,

@@ -22,15 +22,17 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const rotaInicio = require('./content/routes/inicio.router');
 const rotaUsuario = require('./content/routes/usuarios.router');
 const rotaAnuncio = require('./content/routes/anuncios.router');
+const rotaPet = require('./content/routes/pets.router');
 
 // Utilização das rotas
 app.use(rotaInicio);
 app.use(rotaUsuario);
 app.use(rotaAnuncio);
+app.use(rotaPet);
 
 // Inicialização da aplicação
 mongoose
-	.connect(process.env.DATABASE_URL)
+	.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(
 		console.log('Conexão com o MongoDB estabelecida com sucesso!'),
 		app.listen(porta, () => {

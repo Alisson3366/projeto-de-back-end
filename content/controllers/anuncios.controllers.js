@@ -1,6 +1,3 @@
-// const { v4: uuid } = require('uuid');
-// const { ObjectID } = require('bson');
-
 const Usuario = require('../models/usuarios.models');
 const Anuncio = require('../models/anuncios.models');
 
@@ -11,12 +8,12 @@ async function consultaAnuncios(req, res) {
 			return res.status(200).json(anuncios);
 		})
 		.catch((error) => {
-			return res.status(500).json(error);
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 
 async function consultaAnuncioId(req, res) {
-	await Anuncio.findOne({ _id: req.params.id }) //{ _id: ObjectID(req.params.id) }
+	await Anuncio.findOne({ _id: req.params.id })
 		.then((anuncio) => {
 			if (anuncio) {
 				return res.status(200).json(anuncio);
@@ -25,71 +22,92 @@ async function consultaAnuncioId(req, res) {
 			}
 		})
 		.catch((error) => {
-			return res.status(500).json(error);
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 
 // ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS ANÚNCIOS
-async function consultaAnunciosUsuario(req, res) {}
+async function consultaAnunciosUsuario(req, res) {
+	await Usuario.findOne({ _id: req.cookies.idUsuario })
+		.populate('anuncios')
+		.then((usuario) => {
+			if (usuario) {
+				return res.status(200).json(usuario.$getPopulatedDocs());
+			} else {
+				return res.status(404).json({ Erro: 'Usuário não localizado!' });
+			}
+		})
+		.catch((error) => {
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
+		});
+}
 
 async function adicionaAnuncioUsuario(req, res) {
-	const novoAnuncio = new Anuncio(req.body);
-	await novoAnuncio
+	const { tipo, titulo, sexo, raca, quantidade } = req.body;
+
+	// Verificação para criação de um novo anúncio
+	if (!tipo || !titulo || !sexo || !raca) {
+		return res.status(400).json({
+			Erro: 'Para criar um anúncio informe: tipo, titulo, sexo, raca e quantidadede (opcional)!',
+		});
+	}
+
+	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
+	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
+		return res.status(400).json({
+			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
+		});
+	}
+
+	// req.cookies.idUsuario está armazenando o _id do usuário cujo token está acessando as rotas
+	const novoAnuncio = { tipo, titulo, sexo, raca, quantidade, donoAnuncio: req.cookies.idUsuario };
+	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
+
+	await new Anuncio(novoAnuncio)
 		.save()
-		.then((document) => {
-			return res.status(201).json(document);
+		.then((documento) => {
+			novoUsuario.anuncios.push(documento);
+			novoUsuario.save();
+			return res.status(201).json({ Mensagem: 'Anúncio adicionado com sucesso!' });
 		})
 		.catch((error) => {
 			const msgErro = {};
-			Object.values(error.errors).forEach(({ properties }) => {
-				msgErro[properties.path] = properties.message;
-			});
-			return res.status(500).json(msgErro);
+			if (error.errors) {
+				Object.values(error.errors).forEach(({ properties }) => {
+					msgErro[properties.path] = properties.message;
+				});
+				return res.status(500).json(msgErro);
+			}
+			console.log(error);
+			return res.status(422).json(msgErro);
 		});
 }
-
-// function criaAnuncio(req, res) {
-// 	const { proprietario, tipo, titulo, raca, sexo, quantidade } = req.body;
-// 	let novoAnuncio = {
-// 		id: uuid(),
-// 		proprietario: String(req.body.proprietario).toLowerCase(),
-// 		// Dever ser o usuário logado Ex.: usuario.login
-// 		tipo: String(req.body.tipo).toLowerCase(),
-// 		titulo: String(req.body.titulo).toUpperCase(),
-// 		raca: String(req.body.raca).toLowerCase(),
-// 		sexo: String(req.body.sexo).toLowerCase(),
-// 		quantidade: Number(req.body.quantidade),
-// 	};
-
-// 	if (!proprietario && !tipo && !titulo && !raca && !sexo && !quantidade) {
-// 		return res.status(400).json({
-// 			Erro: 'Para criar um anúncio informe: proprietario, tipo, titulo, raca, sexo e quantidadede!',
-// 		});
-// 	}
-
-// 	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
-// 	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
-// 		return res.status(400).json({
-// 			Erro: 'O tipo do anúncio deve dever ser: adoção ou cruzamento.',
-// 		});
-// 	}
-
-// 	// Atribui uma quantidade caso o tipo do anúncio seja de adoção ou não
-// 	novoAnuncio.quantidade = novoAnuncio.tipo === 'adoção' ? Number(req.body.quantidade) : null;
-
-// 	anuncios.push(novoAnuncio);
-// 	res.status(201).json({ Mensagem: 'Novo anúncio criado com sucesso!' });
-// }
 
 async function atualizaAnuncioUsuario(req, res) {
-	await Anuncio.findOneAndUpdate({ _id: ObjectID(req.params.id) }, req.body, {
-		runValidators: true,
-	})
-		.then((anuncio) => {
-			if (anuncio) {
-				return res.status(200).json('Anúncio atualizado com sucesso!');
+	const { tipo, titulo, sexo, raca, quantidade } = req.body;
+
+	// Verificação para criação de um novo anúncio
+	if (!tipo && !titulo && !sexo && !raca) {
+		return res.status(400).json({
+			Erro: 'Informe pelo menos uma informação para alterar o anúncio: tipo, titulo, sexo, raca e quantidadede!',
+		});
+	}
+
+	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
+	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
+		return res.status(400).json({
+			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
+		});
+	}
+
+	const novoAnuncio = { tipo, titulo, sexo, raca, quantidade };
+
+	await Anuncio.findOneAndUpdate({ _id: req.params.id }, novoAnuncio, { runValidators: true })
+		.then((documento) => {
+			if (documento) {
+				return res.status(200).json({ Mensagem: 'Anúncio atualizado com sucesso!' });
 			} else {
-				return res.status(404).json('Anúncio não encontrado!');
+				return res.status(404).json({ Erro: 'Anúncio não localizado!' });
 			}
 		})
 		.catch((error) => {
@@ -98,41 +116,25 @@ async function atualizaAnuncioUsuario(req, res) {
 				msgErro[properties.path] = properties.message;
 			});
 			return res.status(500).json(msgErro);
-			// status de erro 500 ou 422?
 		});
 }
 
-// function atualizaAnuncio(req, res) {
-// 	let anuncio = anuncios.find((value) => value.id === req.params.id);
-// 	const { proprietario, tipo, titulo, raca, sexo, quantidade } = req.body;
-// 	// temporariamente "proprietario"
-// 	if (!proprietario && !tipo && !titulo && !raca && !sexo && !quantidade) {
-// 		return res.status(400).json({
-// 			Erro: 'Informe pelo menos uma informação para alterar o anúncio: proprietario, tipo, titulo, raca, sexo ou quantidade!',
-// 		});
-// 	}
-
-// 	if (proprietario) anuncio.proprietario = String(req.body.proprietario).toLowerCase();
-// 	// temporariamente "proprietario"
-// 	if (tipo) anuncio.tipo = String(req.body.tipo).toLowerCase();
-// 	if (titulo) anuncio.titulo = String(req.body.titulo).toUpperCase();
-// 	if (raca) anuncio.raca = String(req.body.raca).toLowerCase();
-// 	if (sexo) anuncio.sexo = String(req.body.sexo).toLowerCase();
-// 	if (quantidade) anuncio.quantidade = Number(req.body.quantidade);
-// 	res.status(200).json({ Mensagem: 'Seu anúncio foi atualizado!' });
-// }
-
 async function deletaAnuncioUsuario(req, res) {
-	await Anuncio.findOneAndDelete({ _id: ObjectID(req.params.id) }, { runValidators: true })
-		.then((anuncio) => {
-			if (anuncio) {
-				return res.status(200).json('Anúncio deletado com sucesso!');
+	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
+	const posicao = novoUsuario.pets.indexOf(String(req.params.id));
+	novoUsuario.anuncios.splice(posicao, 1);
+	novoUsuario.save();
+
+	await Anuncio.deleteOne({ _id: req.params.id })
+		.then((documento) => {
+			if (documento) {
+				return res.status(200).json({ Mensagem: 'Anúncio deletado do usuário com sucesso!' });
 			} else {
-				return res.status(404).json('Anúncio não encontrado!');
+				return res.status(404).json({ Erro: 'Anúncio não localizado!' });
 			}
 		})
 		.catch((error) => {
-			return res.status(500).json(error);
+			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 

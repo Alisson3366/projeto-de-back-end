@@ -18,7 +18,7 @@ async function consultaAnuncioId(req, res) {
 			if (anuncio) {
 				return res.status(200).json(anuncio);
 			} else {
-				return res.status(404).json('Anúncio não localizado!');
+				return res.status(404).json({ Mensagem: 'Anúncio não localizado!' });
 			}
 		})
 		.catch((error) => {
@@ -47,14 +47,14 @@ async function adicionaAnuncioUsuario(req, res) {
 
 	// Verificação para criação de um novo anúncio
 	if (!tipo || !titulo || !sexo || !raca) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Para criar um anúncio informe: tipo, titulo, sexo, raca e quantidadede (opcional)!',
 		});
 	}
 
 	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
 	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
 		});
 	}
@@ -88,14 +88,14 @@ async function atualizaAnuncioUsuario(req, res) {
 
 	// Verificação para criação de um novo anúncio
 	if (!tipo && !titulo && !sexo && !raca) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Informe pelo menos uma informação para alterar o anúncio: tipo, titulo, sexo, raca e quantidadede!',
 		});
 	}
 
 	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
 	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
 		});
 	}
@@ -128,7 +128,7 @@ async function deletaAnuncioUsuario(req, res) {
 	await Anuncio.deleteOne({ _id: req.params.id })
 		.then((documento) => {
 			if (documento) {
-				return res.status(200).json({ Mensagem: 'Anúncio deletado do usuário com sucesso!' });
+				return res.status(200).json({ Mensagem: 'Anúncio deletado com sucesso!' });
 			} else {
 				return res.status(404).json({ Erro: 'Anúncio não localizado!' });
 			}

@@ -12,7 +12,7 @@ async function registrar(req, res) {
 	const { email, senha, nome } = req.body;
 
 	if (!email || !senha || !nome) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Para criar um usuario informe: email, senha e nome!',
 		});
 	}
@@ -53,7 +53,7 @@ async function entrar(req, res) {
 	const { email, senha } = req.body;
 
 	if (!email || !senha) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Para entrar na aplicação informe: email e senha!',
 		});
 	}

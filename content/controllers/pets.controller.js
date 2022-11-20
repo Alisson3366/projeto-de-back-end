@@ -47,7 +47,7 @@ async function adicionaPetUsuario(req, res) {
 
 	// Verificação para criação de um novo pet
 	if (!nome || !sexo) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Para adicionar um pet informe: nome, sexo e raca (opcional)!',
 		});
 	}
@@ -80,7 +80,7 @@ async function atualizaPetUsuario(req, res) {
 	const { nome, sexo, raca } = req.body;
 
 	if (!nome && !sexo && !raca) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Informe pelo menos uma informação para alterar o pet: nome, sexo ou raça!',
 		});
 	}

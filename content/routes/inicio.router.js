@@ -1,5 +1,6 @@
 const express = require('express');
 const inicioCTRL = require('../controllers/inicio.controllers');
+const middleware = require('../middlewares/validacao');
 const router = express.Router();
 
 router
@@ -20,6 +21,6 @@ router
 router
 	// GET /sair/ -> Permite que o usuário logado saia da aplicação
 	.route('/sair')
-	.get(inicioCTRL.sair);
+	.get(middleware.validaToken, inicioCTRL.sair);
 
 module.exports = router;

@@ -34,7 +34,7 @@ async function atualizaUsuario(req, res) {
 	const { email, senha, nome } = req.body;
 
 	if (!email && !senha && !nome) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Informe pelo menos uma informação para alterar o usuário: email, senha ou nome!',
 		});
 	}

@@ -34,7 +34,7 @@ async function atualizaUsuario(req, res) {
 	const { email, senha, nome } = req.body;
 
 	if (!email && !senha && !nome) {
-		return res.status(400).json({
+		return res.status(422).json({
 			Erro: 'Informe pelo menos uma informação para alterar o usuário: email, senha ou nome!',
 		});
 	}
@@ -70,7 +70,7 @@ async function atualizaUsuario(req, res) {
 }
 
 async function deletaUsuario(req, res) {
-	await Usuario.deleteOne({ _id: req.params.id })
+	await Usuario.findOneAndDelete({ _id: req.params.id })
 		.then((documento) => {
 			if (documento) {
 				return res.status(200).json({ Mensagem: 'Usuário deletado com sucesso!' });

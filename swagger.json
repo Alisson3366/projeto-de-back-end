@@ -3,7 +3,7 @@
 	"info": {
 		"title": "Meu Amigo PET",
 		"version": "1.0.0",
-		"description": "Meu Amigo PET é uma API REST cujo objetivo principal é conectar usuários, sejam eles pais de PETs ou aspirantes ao cargo, com objetivos semelhantes: adoção ou cruzamento. A conexão entre usuários se dá por meio de anúncios, os quais podem ser de adoção ou cruzamento. Assim, usuários logados podem acessar o 'feed de anúnicos' e obter informações e dados de contato com outros usuários. A API visa atender usuários comuns e administradores da API com funcionalidades diferentes para cada um dos tipos de contas. Os usuários devem estar logados no servidor para acessar as diferentes rotas e suas funcionalidades. A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no arquivo package.json), o framework Express e o GitHub. Repositório GitHub: [Meu Amigo PET](https://github.com/Alisson3366/projeto-de-back-end)."
+		"description": "Meu Amigo PET é uma API REST cujo objetivo principal é conectar usuários, sejam eles pais de PETs ou aspirantes ao cargo, com objetivos semelhantes: adoção ou cruzamento. A conexão entre usuários se dá por meio de anúncios, os quais podem ser de adoção ou cruzamento. Assim, usuários logados podem acessar o 'feed de anúnicos' e obter informações de pets e usuários. A API visa atender usuários comuns e administradores com funcionalidades diferentes para cada um dos tipos de contas. Os usuários devem estar logados no servidor para acessar as diferentes rotas e suas funcionalidades. A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no arquivo **package.json**), o framework Express e o [GitHub](https: //github.com/Alisson3366/projeto-de-back-end)."
 	},
 	"servers": [
 		{
@@ -13,15 +13,19 @@
 	"tags": [
 		{
 			"name": "inicio",
-			"description": "Funcionalidades da rota básica  \"/\""
+			"description": "Funcionalidades das rotas iniciais da API."
 		},
 		{
 			"name": "usuarios",
-			"description": "Funcionalidades da rota \"/usuarios\""
+			"description": "Funcionalidades das rotas relativas aos próprios usuários."
 		},
 		{
 			"name": "anuncios",
-			"description": "Funcionalidades da rota \"/anuncios\""
+			"description": "Funcionalidades das rotas relativas aos anúncios dos usuários."
+		},
+		{
+			"name": "pets",
+			"description": "Funcionalidades das rotas relativas aos pets dos usuários."
 		}
 	],
 	"paths": {
@@ -50,28 +54,115 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/registro": {
+			"post": {
+				"tags": [
+					"inicio"
+				],
+				"summary": "Registro na API.",
+				"description": "Registro na API.",
+				"operationId": "registrar",
+				"requestBody": {
+					"description": "Registre-se na API informando email, senha e nome.",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"example": "user1@mail.com"
+									},
+									"senha": {
+										"type": "string",
+										"example": "teste1"
+									},
+									"nome": {
+										"type": "string",
+										"example": "ARNALDO SANTIAGO"
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Novo usuário registrado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										},
+										"Usuario": {
+											"type": "object"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Nome, email ou senha inválidos!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/entrar": {
 			"post": {
 				"tags": [
 					"inicio"
 				],
 				"summary": "Entrar na API.",
 				"description": "Entrar na API.",
-				"operationId": "entrarAPI",
+				"operationId": "entrar",
 				"requestBody": {
-					"description": "Faça login na API usando login e senha.",
+					"description": "Faça login na API usando email e senha.",
 					"content": {
 						"application/json": {
 							"schema": {
 								"type": "object",
 								"properties": {
-									"login": {
+									"email": {
 										"type": "string",
-										"example": "user1"
+										"example": "user1@mail.com"
 									},
 									"senha": {
 										"type": "string",
-										"example": "123456789"
+										"example": "teste1"
 									}
 								}
 							}
@@ -81,7 +172,67 @@
 				},
 				"responses": {
 					"200": {
-						"description": "Login efetuado com sucesso!",
+						"description": "Autenticação realizada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										},
+										"token": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Email ou senha inválidos!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/sair": {
+			"get": {
+				"tags": [
+					"inicio"
+				],
+				"summary": "Sair da API.",
+				"description": "Sair da API.",
+				"operationId": "sair",
+				"responses": {
+					"200": {
+						"description": "Sair da API.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -95,8 +246,8 @@
 							}
 						}
 					},
-					"400": {
-						"description": "Usuário ou senha inválidos!",
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -118,8 +269,8 @@
 				"tags": [
 					"usuarios"
 				],
-				"summary": "Consulta de todos os usuários.",
-				"description": "Consulta de todos os usuários.",
+				"summary": "Consulta de todos os usuários",
+				"description": "Consulta de todos os usuários",
 				"operationId": "consultaUsuarios",
 				"responses": {
 					"200": {
@@ -134,59 +285,9 @@
 								}
 							}
 						}
-					}
-				}
-			},
-			"post": {
-				"tags": [
-					"usuarios"
-				],
-				"summary": "Cria um novo usuário na API.",
-				"description": "Cria um novo usuário na API.",
-				"operationId": "criaUsuario",
-				"requestBody": {
-					"description": "Cria um novo usuário na API.",
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"login": {
-										"type": "string",
-										"example": "user3"
-									},
-									"senha": {
-										"type": "string",
-										"example": "951753"
-									},
-									"nome": {
-										"type": "string",
-										"example": "Mustafá Soares"
-									}
-								}
-							}
-						}
 					},
-					"required": true
-				},
-				"responses": {
-					"201": {
-						"description": "Usuário criado com sucesso!",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object",
-									"properties": {
-										"Mensagem": {
-											"type": "string"
-										}
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Alguma informação passada é inválida!",
+					"500": {
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -203,14 +304,14 @@
 				}
 			}
 		},
-		"/usuarios/{id}": {
+		"/usuario/{id}": {
 			"get": {
 				"tags": [
 					"usuarios"
 				],
-				"summary": "Consulta de usuário específico pelo ID.",
-				"description": "Consulta de usuário específico pelo ID.",
-				"operationId": "consultaUsuarioID",
+				"summary": "Consulta de usuário específico pelo ID",
+				"description": "Consulta de usuário específico pelo ID",
+				"operationId": "consultaUsuarioId",
 				"parameters": [
 					{
 						"name": "id",
@@ -235,7 +336,22 @@
 						}
 					},
 					"400": {
-						"description": "ID não encontrado ou inválido!",
+						"description": "ID de usuário inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -250,7 +366,7 @@
 						}
 					},
 					"404": {
-						"description": "Usuário não encontrado!",
+						"description": "Usuário não localizado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -265,7 +381,7 @@
 						}
 					},
 					"500": {
-						"description": "Erro interno no servidor!",
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -285,8 +401,8 @@
 				"tags": [
 					"usuarios"
 				],
-				"summary": "Atualiza um usuário já existente.",
-				"description": "Atualiza um usuário já existente.",
+				"summary": "Atualiza um usuário já existente",
+				"description": "Atualiza um usuário já existente",
 				"operationId": "atualizaUsuario",
 				"parameters": [
 					{
@@ -307,17 +423,17 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"login": {
+									"email": {
 										"type": "string",
-										"example": "user7"
+										"example": "user7@mail.com"
 									},
 									"senha": {
 										"type": "string",
-										"example": "654321"
+										"example": "teste7"
 									},
 									"nome": {
 										"type": "string",
-										"example": "Joaquim Pereira Santos"
+										"example": "JOAQUIM PEREIRA"
 									}
 								}
 							}
@@ -342,7 +458,22 @@
 						}
 					},
 					"400": {
-						"description": "ID não encontrado ou inválido!",
+						"description": "ID de usuário inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -357,7 +488,22 @@
 						}
 					},
 					"404": {
-						"description": "Usuário não encontrado!",
+						"description": "Usuário não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Nome, email ou senha inválidos!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -372,7 +518,7 @@
 						}
 					},
 					"500": {
-						"description": "Erro interno no servidor!",
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -392,8 +538,8 @@
 				"tags": [
 					"usuarios"
 				],
-				"summary": "Deleta um usuário da API.",
-				"description": "Deleta um usuário da API.",
+				"summary": "Deleta um usuário da API",
+				"description": "Deleta um usuário da API",
 				"operationId": "deletaUsuario",
 				"parameters": [
 					{
@@ -424,7 +570,22 @@
 						}
 					},
 					"400": {
-						"description": "ID não encontrado ou inválido!",
+						"description": "ID de usuário inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -439,7 +600,7 @@
 						}
 					},
 					"404": {
-						"description": "Usuário não encontrado!",
+						"description": "Usuário não localizado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -454,7 +615,7 @@
 						}
 					},
 					"500": {
-						"description": "Erro interno no servidor!",
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -492,71 +653,9 @@
 								}
 							}
 						}
-					}
-				}
-			},
-			"post": {
-				"tags": [
-					"anuncios"
-				],
-				"summary": "Cria um novo anúncio na API",
-				"description": "Cria um novo anúncio na API",
-				"operationId": "criaAnuncio",
-				"requestBody": {
-					"description": "Cria um novo anúncio na API",
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"proprietario": {
-										"type": "string",
-										"example": "user5"
-									},
-									"tipo": {
-										"type": "string",
-										"example": "adoção"
-									},
-									"titulo": {
-										"type": "string",
-										"example": "Estao disponíveis para adoção 6 cachorros machos sem raça definida."
-									},
-									"raca": {
-										"type": "string",
-										"example": "SRD"
-									},
-									"sexo": {
-										"type": "string",
-										"example": "macho"
-									},
-									"quantidade": {
-										"type": "integer",
-										"example": 6
-									}
-								}
-							}
-						}
 					},
-					"required": true
-				},
-				"responses": {
-					"201": {
-						"description": "Anúncio criado com sucesso!",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object",
-									"properties": {
-										"Mensagem": {
-											"type": "string"
-										}
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Alguma informação passada é inválida!",
+					"500": {
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -573,7 +672,7 @@
 				}
 			}
 		},
-		"/anuncios/{id}": {
+		"/anuncio/{id}": {
 			"get": {
 				"tags": [
 					"anuncios"
@@ -605,7 +704,7 @@
 						}
 					},
 					"400": {
-						"description": "ID não encontrado ou inválido!",
+						"description": "ID de anúncio inválido!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -620,7 +719,7 @@
 						}
 					},
 					"404": {
-						"description": "Anúncio não encontrado!",
+						"description": "Anúncio não localizado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -635,7 +734,77 @@
 						}
 					},
 					"500": {
-						"description": "Erro interno no servidor!",
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/anuncios/usuario": {
+			"get": {
+				"tags": [
+					"anuncios"
+				],
+				"summary": "Consulta dos anúncios do usuário logado",
+				"description": "Consulta dos anúncios do usuário logado",
+				"operationId": "consultaAnunciosUsuario",
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/ANUNCIOS"
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Usuário não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -651,13 +820,133 @@
 					}
 				}
 			},
+			"post": {
+				"tags": [
+					"anuncios"
+				],
+				"summary": "Cria novo anúncio do usuário logado",
+				"description": "Cria novo anúncio do usuário logado",
+				"operationId": "adicionaAnuncioUsuario",
+				"requestBody": {
+					"description": "Cria novo anúncio do usuário logado",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"tipo": {
+										"type": "string",
+										"example": "cruzamento"
+									},
+									"titulo": {
+										"type": "string",
+										"example": "PROCURO UM PARCEIRO DE CRUZA PARA A MINHA BORDER COLLIE"
+									},
+									"sexo": {
+										"type": "string",
+										"example": "fêmea"
+									},
+									"raca": {
+										"type": "string",
+										"example": "border collie"
+									},
+									"quantidade": {
+										"type": "integer",
+										"example": 0
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Anúncio adicionado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Usuário não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Tipo, titulo, sexo, raca ou quantidade inválidos!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/anuncio/usuario/{id}": {
 			"patch": {
 				"tags": [
 					"anuncios"
 				],
-				"summary": "Atualiza um anúncio já existente",
-				"description": "Atualiza um anúncio já existente",
-				"operationId": "atualizaAnuncio",
+				"summary": "Atualiza um anúncio já existente de um usuário",
+				"description": "Atualiza um anúncio já existente de um usuário",
+				"operationId": "atualizaAnuncioUsuario",
 				"parameters": [
 					{
 						"name": "id",
@@ -671,31 +960,27 @@
 					}
 				],
 				"requestBody": {
-					"description": "Atualiza um anúncio já existente",
+					"description": "Atualiza um anúncio já existente de um usuário",
 					"content": {
 						"application/json": {
 							"schema": {
 								"type": "object",
 								"properties": {
-									"proprietario": {
-										"type": "string",
-										"example": "user9"
-									},
 									"tipo": {
 										"type": "string",
 										"example": "cruzamento"
 									},
 									"titulo": {
 										"type": "string",
-										"example": "Procuro um pareceiro de cruza para minha Border Collie."
-									},
-									"raca": {
-										"type": "string",
-										"example": "Border Collie"
+										"example": "PROCURO UM PARCEIRO DE CRUZA PARA A MINHA BORDER COLLIE"
 									},
 									"sexo": {
 										"type": "string",
 										"example": "fêmea"
+									},
+									"raca": {
+										"type": "string",
+										"example": "border collie"
 									},
 									"quantidade": {
 										"type": "integer",
@@ -724,7 +1009,22 @@
 						}
 					},
 					"400": {
-						"description": "ID não encontrado ou inválido!",
+						"description": "ID de anúncio inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -739,7 +1039,22 @@
 						}
 					},
 					"404": {
-						"description": "Anúncio não encontrado!",
+						"description": "Anúncio não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Tipo, titulo, sexo, raca ou quantidade inválidos!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -754,7 +1069,7 @@
 						}
 					},
 					"500": {
-						"description": "Erro interno no servidor!",
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -774,9 +1089,9 @@
 				"tags": [
 					"anuncios"
 				],
-				"summary": "Deleta um anúncio da API",
-				"description": "Deleta um anúncio da API",
-				"operationId": "deletaAnuncio",
+				"summary": "Deleta o anúncio de um usuário da API",
+				"description": "Deleta o anúncio de um usuário da API",
+				"operationId": "deletaAnuncioUsuario",
 				"parameters": [
 					{
 						"name": "id",
@@ -806,7 +1121,22 @@
 						}
 					},
 					"400": {
-						"description": "ID não encontrado ou inválido!",
+						"description": "ID de anúncio inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -821,7 +1151,7 @@
 						}
 					},
 					"404": {
-						"description": "Anúncio não encontrado!",
+						"description": "Anúncio não localizado!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -836,7 +1166,542 @@
 						}
 					},
 					"500": {
-						"description": "Erro interno no servidor!",
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/pets": {
+			"get": {
+				"tags": [
+					"pets"
+				],
+				"summary": "Consulta de todos os pets",
+				"description": "Consulta de todos os pets",
+				"operationId": "consultaPets",
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/PETS"
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/pet/{id}": {
+			"get": {
+				"tags": [
+					"pets"
+				],
+				"summary": "Consulta de pet específico pelo ID",
+				"description": "Consulta de pet específico pelo ID",
+				"operationId": "consultaPetId",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID do pet a ser consultado.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PETS"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ID de pet inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Pet não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/pets/usuario": {
+			"get": {
+				"tags": [
+					"pets"
+				],
+				"summary": "Consulta dos pets do usuário logado",
+				"description": "Consulta dos pets do usuário logado",
+				"operationId": "consultaPetsUsuario",
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/PETS"
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Usuário não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"pets"
+				],
+				"summary": "Cria novo pet do usuário logado",
+				"description": "Cria novo pet do usuário logado",
+				"operationId": "adicionaPetUsuario",
+				"requestBody": {
+					"description": "Cria novo pet do usuário logado",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"nome": {
+										"type": "string",
+										"example": "PITOCO"
+									},
+									"sexo": {
+										"type": "string",
+										"example": "fêmea"
+									},
+									"raca": {
+										"type": "string",
+										"example": "srd"
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Pet adicionado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Usuário não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Nome, sexo ou raca inválidos!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/pet/usuario/{id}": {
+			"patch": {
+				"tags": [
+					"pets"
+				],
+				"summary": "Atualiza um pet já existente de um usuário",
+				"description": "Atualiza um pet já existente de um usuário",
+				"operationId": "atualizaPetUsuario",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID do pet a ser atualizado.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Atualiza um pet já existente de um usuário",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"nome": {
+										"type": "string",
+										"example": "PITOCO"
+									},
+									"sexo": {
+										"type": "string",
+										"example": "fêmea"
+									},
+									"raca": {
+										"type": "string",
+										"example": "srd"
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Pet atualizado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ID de pet inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Pet não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Nome, sexo ou raca inválidos!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"pets"
+				],
+				"summary": "Deleta o pet de um usuário da API",
+				"description": "Deleta o pet de um usuário da API",
+				"operationId": "deletaPetUsuario",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID do pet a ser deletado.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Pet deletado com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Mensagem": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ID de pet inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Pet não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -856,6 +1721,83 @@
 	},
 	"components": {
 		"schemas": {
+			"USUARIOS": {
+				"required": [
+					"email",
+					"senha",
+					"nome"
+				],
+				"type": "object",
+				"properties": {
+					"_id": {
+						"type": "string",
+						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+					},
+					"email": {
+						"type": "string",
+						"example": "user1@mail.com"
+					},
+					"senha": {
+						"type": "string",
+						"example": "teste1"
+					},
+					"nome": {
+						"type": "string",
+						"example": "ARNALDO SANTIAGO"
+					},
+					"pets": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/PETS"
+						}
+					},
+					"anuncios": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ANUNCIOS"
+						}
+					}
+				}
+			},
+			"ANUNCIOS": {
+				"required": [
+					"tipo",
+					"titulo",
+					"sexo",
+					"raca"
+				],
+				"type": "object",
+				"properties": {
+					"_id": {
+						"type": "string",
+						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+					},
+					"donoAnuncio": {
+						"type": "string",
+						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+					},
+					"tipo": {
+						"type": "string",
+						"example": "adoção"
+					},
+					"titulo": {
+						"type": "string",
+						"example": "3 FILHOTES DE PIT BUL PARA ADOÇÃO"
+					},
+					"sexo": {
+						"type": "string",
+						"example": "ambos"
+					},
+					"raca": {
+						"type": "string",
+						"example": "american pit bull terrier"
+					},
+					"quantidade": {
+						"type": "integer",
+						"example": 4
+					}
+				}
+			},
 			"PETS": {
 				"required": [
 					"nome",
@@ -864,7 +1806,11 @@
 				],
 				"type": "object",
 				"properties": {
-					"id": {
+					"_id": {
+						"type": "string",
+						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+					},
+					"donoPet": {
 						"type": "string",
 						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
 					},
@@ -879,83 +1825,6 @@
 					"raca": {
 						"type": "string",
 						"example": "beagle"
-					}
-				}
-			},
-			"USUARIOS": {
-				"required": [
-					"login",
-					"senha",
-					"nome"
-				],
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string",
-						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
-					},
-					"login": {
-						"type": "string",
-						"example": "user1"
-					},
-					"senha": {
-						"type": "string",
-						"example": "123456789"
-					},
-					"nome": {
-						"type": "string",
-						"example": "João Vinceslau"
-					},
-					"temPet": {
-						"type": "boolean",
-						"example": true
-					},
-					"pets": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PETS"
-						}
-					}
-				}
-			},
-			"ANUNCIOS": {
-				"required": [
-					"proprietario",
-					"tipo",
-					"titulo",
-					"raca",
-					"sexo",
-					"quantidade"
-				],
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string",
-						"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
-					},
-					"proprietario": {
-						"type": "string",
-						"example": "user1"
-					},
-					"tipo": {
-						"type": "string",
-						"example": "adoção"
-					},
-					"titulo": {
-						"type": "string",
-						"example": "3 FILHOTES DE PIT BUL PARA ADOÇÃO"
-					},
-					"raca": {
-						"type": "string",
-						"example": "american pit bull terrier"
-					},
-					"sexo": {
-						"type": "string",
-						"example": "ambos"
-					},
-					"quantidade": {
-						"type": "integer",
-						"example": 4
 					}
 				}
 			}

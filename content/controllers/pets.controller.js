@@ -1,5 +1,6 @@
 const Usuario = require('../models/usuarios.models');
 const Pet = require('../models/pets.models');
+const jwt = require('jsonwebtoken');
 
 // ROTAS PÚBLICAS DOS PETS (CONTA DE ADMINISTRADOR)
 async function consultaPets(req, res) {
@@ -28,7 +29,10 @@ async function consultaPetId(req, res) {
 
 // ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS PETS
 async function consultaPetsUsuario(req, res) {
-	await Usuario.findOne({ _id: req.cookies.idUsuario })
+	const token = req.cookies.tokenUsuario;
+	const segredo = process.env.SEGREDO;
+	const payload = jwt.verify(token, segredo);
+	await Usuario.findOne({ _id: payload.id })
 		.populate('pets')
 		.then((usuario) => {
 			if (usuario) {
@@ -52,9 +56,13 @@ async function adicionaPetUsuario(req, res) {
 		});
 	}
 
+	const token = req.cookies.tokenUsuario;
+	const segredo = process.env.SEGREDO;
+	const payload = jwt.verify(token, segredo);
+
 	// req.cookies.idUsuario está armazenando o _id do usuário cujo token está acessando as rotas
-	const novoPet = { nome, sexo, raca, donoPet: req.cookies.idUsuario };
-	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
+	const novoPet = { nome, sexo, raca, donoPet: payload.id };
+	const novoUsuario = await Usuario.findOne({ _id: payload.id });
 
 	await new Pet(novoPet)
 		.save()
@@ -105,7 +113,10 @@ async function atualizaPetUsuario(req, res) {
 }
 
 async function deletaPetUsuario(req, res) {
-	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
+	const token = req.cookies.tokenUsuario;
+	const segredo = process.env.SEGREDO;
+	const payload = jwt.verify(token, segredo);
+	const novoUsuario = await Usuario.findOne({ _id: payload.id });
 	const posicao = novoUsuario.pets.indexOf(String(req.params.id));
 	novoUsuario.pets.splice(posicao, 1);
 	novoUsuario.save();

@@ -31,9 +31,7 @@
 	"paths": {
 		"/": {
 			"get": {
-				"tags": [
-					"inicio"
-				],
+				"tags": ["inicio"],
 				"summary": "Boas vindas a API.",
 				"description": "Boas vindas a API.",
 				"operationId": "boasVindas",
@@ -58,9 +56,7 @@
 		},
 		"/registro": {
 			"post": {
-				"tags": [
-					"inicio"
-				],
+				"tags": ["inicio"],
 				"summary": "Registro na API.",
 				"description": "Registro na API.",
 				"operationId": "registrar",
@@ -143,9 +139,7 @@
 		},
 		"/entrar": {
 			"post": {
-				"tags": [
-					"inicio"
-				],
+				"tags": ["inicio"],
 				"summary": "Entrar na API.",
 				"description": "Entrar na API.",
 				"operationId": "entrar",
@@ -181,7 +175,7 @@
 										"Mensagem": {
 											"type": "string"
 										},
-										"token": {
+										"Token": {
 											"type": "string"
 										}
 									}
@@ -224,9 +218,7 @@
 		},
 		"/sair": {
 			"get": {
-				"tags": [
-					"inicio"
-				],
+				"tags": ["inicio"],
 				"summary": "Sair da API.",
 				"description": "Sair da API.",
 				"operationId": "sair",
@@ -266,9 +258,7 @@
 		},
 		"/usuarios": {
 			"get": {
-				"tags": [
-					"usuarios"
-				],
+				"tags": ["usuarios"],
 				"summary": "Consulta de todos os usuários",
 				"description": "Consulta de todos os usuários",
 				"operationId": "consultaUsuarios",
@@ -306,9 +296,7 @@
 		},
 		"/usuario/{id}": {
 			"get": {
-				"tags": [
-					"usuarios"
-				],
+				"tags": ["usuarios"],
 				"summary": "Consulta de usuário específico pelo ID",
 				"description": "Consulta de usuário específico pelo ID",
 				"operationId": "consultaUsuarioId",
@@ -398,9 +386,7 @@
 				}
 			},
 			"patch": {
-				"tags": [
-					"usuarios"
-				],
+				"tags": ["usuarios"],
 				"summary": "Atualiza um usuário já existente",
 				"description": "Atualiza um usuário já existente",
 				"operationId": "atualizaUsuario",
@@ -535,9 +521,7 @@
 				}
 			},
 			"delete": {
-				"tags": [
-					"usuarios"
-				],
+				"tags": ["usuarios"],
 				"summary": "Deleta um usuário da API",
 				"description": "Deleta um usuário da API",
 				"operationId": "deletaUsuario",
@@ -634,9 +618,7 @@
 		},
 		"/anuncios": {
 			"get": {
-				"tags": [
-					"anuncios"
-				],
+				"tags": ["anuncios"],
 				"summary": "Consulta de todos os anúncios",
 				"description": "Consulta de todos os anúncios",
 				"operationId": "consultaAnuncios",
@@ -674,9 +656,7 @@
 		},
 		"/anuncio/{id}": {
 			"get": {
-				"tags": [
-					"anuncios"
-				],
+				"tags": ["anuncios"],
 				"summary": "Consulta de anúncio específico pelo ID",
 				"description": "Consulta de anúncio específico pelo ID",
 				"operationId": "consultaAnuncioID",
@@ -753,9 +733,7 @@
 		},
 		"/anuncios/usuario": {
 			"get": {
-				"tags": [
-					"anuncios"
-				],
+				"tags": ["anuncios"],
 				"summary": "Consulta dos anúncios do usuário logado",
 				"description": "Consulta dos anúncios do usuário logado",
 				"operationId": "consultaAnunciosUsuario",
@@ -821,9 +799,7 @@
 				}
 			},
 			"post": {
-				"tags": [
-					"anuncios"
-				],
+				"tags": ["anuncios"],
 				"summary": "Cria novo anúncio do usuário logado",
 				"description": "Cria novo anúncio do usuário logado",
 				"operationId": "adicionaAnuncioUsuario",
@@ -941,9 +917,7 @@
 		},
 		"/anuncio/usuario/{id}": {
 			"patch": {
-				"tags": [
-					"anuncios"
-				],
+				"tags": ["anuncios"],
 				"summary": "Atualiza um anúncio já existente de um usuário",
 				"description": "Atualiza um anúncio já existente de um usuário",
 				"operationId": "atualizaAnuncioUsuario",
@@ -1086,9 +1060,7 @@
 				}
 			},
 			"delete": {
-				"tags": [
-					"anuncios"
-				],
+				"tags": ["anuncios"],
 				"summary": "Deleta o anúncio de um usuário da API",
 				"description": "Deleta o anúncio de um usuário da API",
 				"operationId": "deletaAnuncioUsuario",
@@ -1185,9 +1157,7 @@
 		},
 		"/pets": {
 			"get": {
-				"tags": [
-					"pets"
-				],
+				"tags": ["pets"],
 				"summary": "Consulta de todos os pets",
 				"description": "Consulta de todos os pets",
 				"operationId": "consultaPets",
@@ -1225,9 +1195,7 @@
 		},
 		"/pet/{id}": {
 			"get": {
-				"tags": [
-					"pets"
-				],
+				"tags": ["pets"],
 				"summary": "Consulta de pet específico pelo ID",
 				"description": "Consulta de pet específico pelo ID",
 				"operationId": "consultaPetId",
@@ -1304,9 +1272,7 @@
 		},
 		"/pets/usuario": {
 			"get": {
-				"tags": [
-					"pets"
-				],
+				"tags": ["pets"],
 				"summary": "Consulta dos pets do usuário logado",
 				"description": "Consulta dos pets do usuário logado",
 				"operationId": "consultaPetsUsuario",
@@ -1372,9 +1338,7 @@
 				}
 			},
 			"post": {
-				"tags": [
-					"pets"
-				],
+				"tags": ["pets"],
 				"summary": "Cria novo pet do usuário logado",
 				"description": "Cria novo pet do usuário logado",
 				"operationId": "adicionaPetUsuario",
@@ -1484,9 +1448,7 @@
 		},
 		"/pet/usuario/{id}": {
 			"patch": {
-				"tags": [
-					"pets"
-				],
+				"tags": ["pets"],
 				"summary": "Atualiza um pet já existente de um usuário",
 				"description": "Atualiza um pet já existente de um usuário",
 				"operationId": "atualizaPetUsuario",
@@ -1621,9 +1583,7 @@
 				}
 			},
 			"delete": {
-				"tags": [
-					"pets"
-				],
+				"tags": ["pets"],
 				"summary": "Deleta o pet de um usuário da API",
 				"description": "Deleta o pet de um usuário da API",
 				"operationId": "deletaPetUsuario",
@@ -1722,11 +1682,7 @@
 	"components": {
 		"schemas": {
 			"USUARIOS": {
-				"required": [
-					"email",
-					"senha",
-					"nome"
-				],
+				"required": ["email", "senha", "nome"],
 				"type": "object",
 				"properties": {
 					"_id": {
@@ -1760,12 +1716,7 @@
 				}
 			},
 			"ANUNCIOS": {
-				"required": [
-					"tipo",
-					"titulo",
-					"sexo",
-					"raca"
-				],
+				"required": ["tipo", "titulo", "sexo", "raca"],
 				"type": "object",
 				"properties": {
 					"_id": {
@@ -1799,11 +1750,7 @@
 				}
 			},
 			"PETS": {
-				"required": [
-					"nome",
-					"sexo",
-					"raca"
-				],
+				"required": ["nome", "sexo", "raca"],
 				"type": "object",
 				"properties": {
 					"_id": {

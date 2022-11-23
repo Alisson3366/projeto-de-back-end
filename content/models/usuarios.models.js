@@ -7,7 +7,7 @@ const usuarioSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 			immutable: true,
-			default: uuid(),
+			// default: uuid(),
 		},
 		email: {
 			type: String,

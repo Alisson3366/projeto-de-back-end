@@ -1,5 +1,6 @@
 const Usuario = require('../models/usuarios.models');
 const Anuncio = require('../models/anuncios.models');
+const jwt = require('jsonwebtoken');
 
 // ROTAS PÚBLICAS DOS ANÚNCIOS (CONTA DE ADMINISTRADOR)
 async function consultaAnuncios(req, res) {
@@ -28,7 +29,10 @@ async function consultaAnuncioId(req, res) {
 
 // ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS ANÚNCIOS
 async function consultaAnunciosUsuario(req, res) {
-	await Usuario.findOne({ _id: req.cookies.idUsuario })
+	const token = req.cookies.tokenUsuario;
+	const segredo = process.env.SEGREDO;
+	const payload = jwt.verify(token, segredo);
+	await Usuario.findOne({ _id: payload.id })
 		.populate('anuncios')
 		.then((usuario) => {
 			if (usuario) {
@@ -53,15 +57,29 @@ async function adicionaAnuncioUsuario(req, res) {
 	}
 
 	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
-	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
+	if (
+		String(req.body.tipo).toLowerCase() != 'adoção' &&
+		String(req.body.tipo).toLowerCase() != 'cruzamento'
+	) {
 		return res.status(422).json({
 			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
 		});
 	}
 
+	const token = req.cookies.tokenUsuario;
+	const segredo = process.env.SEGREDO;
+	const payload = jwt.verify(token, segredo);
+
 	// req.cookies.idUsuario está armazenando o _id do usuário cujo token está acessando as rotas
-	const novoAnuncio = { tipo, titulo, sexo, raca, quantidade, donoAnuncio: req.cookies.idUsuario };
-	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
+	const novoAnuncio = {
+		tipo,
+		titulo,
+		sexo,
+		raca,
+		quantidade,
+		donoAnuncio: payload.id,
+	};
+	const novoUsuario = await Usuario.findOne({ _id: payload.id });
 
 	await new Anuncio(novoAnuncio)
 		.save()
@@ -94,7 +112,10 @@ async function atualizaAnuncioUsuario(req, res) {
 	}
 
 	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
-	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
+	if (
+		String(req.body.tipo).toLowerCase() != 'adoção' &&
+		String(req.body.tipo).toLowerCase() != 'cruzamento'
+	) {
 		return res.status(422).json({
 			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
 		});
@@ -120,8 +141,11 @@ async function atualizaAnuncioUsuario(req, res) {
 }
 
 async function deletaAnuncioUsuario(req, res) {
-	const novoUsuario = await Usuario.findOne({ _id: req.cookies.idUsuario });
-	const posicao = novoUsuario.pets.indexOf(String(req.params.id));
+	const token = req.cookies.tokenUsuario;
+	const segredo = process.env.SEGREDO;
+	const payload = jwt.verify(token, segredo);
+	const novoUsuario = await Usuario.findOne({ _id: payload.id });
+	const posicao = novoUsuario.anuncios.indexOf(String(req.params.id));
 	novoUsuario.anuncios.splice(posicao, 1);
 	novoUsuario.save();
 

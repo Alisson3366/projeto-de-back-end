@@ -1,6 +1,7 @@
 const Usuario = require('../models/usuarios.models');
 const Pet = require('../models/pets.models');
 const jwt = require('jsonwebtoken');
+const logger = require('../middlewares/logger');
 
 // ROTAS PÚBLICAS DOS PETS (CONTA DE ADMINISTRADOR)
 async function consultaPets(req, res) {
@@ -9,6 +10,7 @@ async function consultaPets(req, res) {
 			return res.status(200).json(pets);
 		})
 		.catch((error) => {
+			logger(error)
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
@@ -23,6 +25,7 @@ async function consultaPetId(req, res) {
 			}
 		})
 		.catch((error) => {
+			logger(error)
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
@@ -42,6 +45,7 @@ async function consultaPetsUsuario(req, res) {
 			}
 		})
 		.catch((error) => {
+			logger(error)
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
@@ -130,6 +134,7 @@ async function deletaPetUsuario(req, res) {
 			}
 		})
 		.catch((error) => {
+			logger(error)
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }

@@ -1,19 +1,21 @@
 const Usuario = require('../models/usuarios.models');
 const Anuncio = require('../models/anuncios.models');
 const jwt = require('jsonwebtoken');
+const logger = require('../middlewares/logger');
 
 // ROTAS PÚBLICAS DOS ANÚNCIOS (CONTA DE ADMINISTRADOR)
-async function consultaAnuncios(req, res) {
+const consultaAnuncios = async (req, res) => {
 	await Anuncio.find({})
 		.then((anuncios) => {
 			return res.status(200).json(anuncios);
 		})
 		.catch((error) => {
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 
-async function consultaAnuncioId(req, res) {
+const consultaAnuncioId = async (req, res) => {
 	await Anuncio.findOne({ _id: req.params.id })
 		.then((anuncio) => {
 			if (anuncio) {
@@ -23,12 +25,13 @@ async function consultaAnuncioId(req, res) {
 			}
 		})
 		.catch((error) => {
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 
 // ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS ANÚNCIOS
-async function consultaAnunciosUsuario(req, res) {
+const consultaAnunciosUsuario = async (req, res) => {
 	const token = req.cookies.tokenUsuario;
 	const segredo = process.env.SEGREDO;
 	const payload = jwt.verify(token, segredo);
@@ -42,11 +45,12 @@ async function consultaAnunciosUsuario(req, res) {
 			}
 		})
 		.catch((error) => {
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
 
-async function adicionaAnuncioUsuario(req, res) {
+const adicionaAnuncioUsuario = async (req, res) => {
 	const { tipo, titulo, sexo, raca, quantidade } = req.body;
 
 	// Verificação para criação de um novo anúncio
@@ -96,12 +100,12 @@ async function adicionaAnuncioUsuario(req, res) {
 				});
 				return res.status(500).json(msgErro);
 			}
-			console.log(error);
+			logger(error);
 			return res.status(422).json(msgErro);
 		});
 }
 
-async function atualizaAnuncioUsuario(req, res) {
+const atualizaAnuncioUsuario = async (req, res) => {
 	const { tipo, titulo, sexo, raca, quantidade } = req.body;
 
 	// Verificação para criação de um novo anúncio
@@ -137,10 +141,11 @@ async function atualizaAnuncioUsuario(req, res) {
 				msgErro[properties.path] = properties.message;
 			});
 			return res.status(500).json(msgErro);
+			logger(error);
 		});
 }
 
-async function deletaAnuncioUsuario(req, res) {
+const deletaAnuncioUsuario = async (req, res) => {
 	const token = req.cookies.tokenUsuario;
 	const segredo = process.env.SEGREDO;
 	const payload = jwt.verify(token, segredo);
@@ -158,6 +163,7 @@ async function deletaAnuncioUsuario(req, res) {
 			}
 		})
 		.catch((error) => {
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }

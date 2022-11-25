@@ -1,3 +1,3 @@
-const logaErro = (mensagem) => console.error(`erro: ${mensagem}`);
+const logaErro = (mensagem) => console.error(`Erro: ${mensagem}`);
 
-module.exports = {logaErro};
+module.exports = { logaErro };

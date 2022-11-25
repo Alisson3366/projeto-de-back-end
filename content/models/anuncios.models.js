@@ -7,7 +7,6 @@ const anuncioSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 			immutable: true,
-			default: uuid(),
 		},
 		donoAnuncio: {
 			type: mongoose.Schema.Types.String,

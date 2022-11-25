@@ -7,7 +7,6 @@ const petSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 			immutable: true,
-			default: uuid(),
 		},
 		donoPet: {
 			type: mongoose.Schema.Types.String,

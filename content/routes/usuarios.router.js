@@ -16,9 +16,9 @@ router
 
 // ROTAS PRIVADAS RELATIVAS AO PRÓPRIO USUÁRIO
 router
-	// GET /usuarios/:id_U/ -> Permite que o usuário logado consulte seus próprios dados
-	// PATCH /usuarios/:id_U/ -> Permite que o usuário logado atualize seus próprios dados
-	// DELETE /usuarios/:id_U/ -> Permite que o usuário logado detele sua própria conta
+	// GET /usuario/ -> Permite que o usuário logado consulte seus próprios dados
+	// PATCH /usuario/ -> Permite que o usuário logado atualize seus próprios dados
+	// DELETE /usuario/ -> Permite que o usuário logado detele sua própria conta
 	.route('/usuario')
 	.get(middleware.validaToken, usuariosCTRL.consultaUsuarioId)
 	.patch(middleware.validaToken, usuariosCTRL.atualizaUsuario)

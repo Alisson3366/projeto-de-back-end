@@ -1,6 +1,7 @@
 const Usuario = require('../models/usuarios.models');
 const Anuncio = require('../models/anuncios.models');
 const jwt = require('jsonwebtoken');
+const { v4: uuid } = require('uuid');
 const logger = require('../middlewares/logger');
 
 // ROTAS PÚBLICAS DOS ANÚNCIOS (CONTA DE ADMINISTRADOR)
@@ -13,7 +14,7 @@ const consultaAnuncios = async (req, res) => {
 			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
-}
+};
 
 const consultaAnuncioId = async (req, res) => {
 	await Anuncio.findOne({ _id: req.params.id })
@@ -28,7 +29,7 @@ const consultaAnuncioId = async (req, res) => {
 			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
-}
+};
 
 // ROTAS PRIVADAS RELATIVAS AOS PRÓPRIOS ANÚNCIOS
 const consultaAnunciosUsuario = async (req, res) => {
@@ -48,7 +49,7 @@ const consultaAnunciosUsuario = async (req, res) => {
 			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
-}
+};
 
 const adicionaAnuncioUsuario = async (req, res) => {
 	const { tipo, titulo, sexo, raca, quantidade } = req.body;
@@ -61,10 +62,7 @@ const adicionaAnuncioUsuario = async (req, res) => {
 	}
 
 	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
-	if (
-		String(req.body.tipo).toLowerCase() != 'adoção' &&
-		String(req.body.tipo).toLowerCase() != 'cruzamento'
-	) {
+	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
 		return res.status(422).json({
 			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
 		});
@@ -76,6 +74,7 @@ const adicionaAnuncioUsuario = async (req, res) => {
 
 	// req.cookies.idUsuario está armazenando o _id do usuário cujo token está acessando as rotas
 	const novoAnuncio = {
+		_id: uuid(),
 		tipo,
 		titulo,
 		sexo,
@@ -103,7 +102,7 @@ const adicionaAnuncioUsuario = async (req, res) => {
 			logger(error);
 			return res.status(422).json(msgErro);
 		});
-}
+};
 
 const atualizaAnuncioUsuario = async (req, res) => {
 	const { tipo, titulo, sexo, raca, quantidade } = req.body;
@@ -116,10 +115,7 @@ const atualizaAnuncioUsuario = async (req, res) => {
 	}
 
 	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
-	if (
-		String(req.body.tipo).toLowerCase() != 'adoção' &&
-		String(req.body.tipo).toLowerCase() != 'cruzamento'
-	) {
+	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
 		return res.status(422).json({
 			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',
 		});
@@ -140,10 +136,10 @@ const atualizaAnuncioUsuario = async (req, res) => {
 			Object.values(error.errors).forEach(({ properties }) => {
 				msgErro[properties.path] = properties.message;
 			});
-			return res.status(500).json(msgErro);
 			logger(error);
+			return res.status(500).json(msgErro);
 		});
-}
+};
 
 const deletaAnuncioUsuario = async (req, res) => {
 	const token = req.cookies.tokenUsuario;
@@ -166,7 +162,7 @@ const deletaAnuncioUsuario = async (req, res) => {
 			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
-}
+};
 
 module.exports = {
 	consultaAnuncios,

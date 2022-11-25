@@ -32,9 +32,7 @@ async function registrar(req, res) {
 		.save()
 		.then((documento) => {
 			documento.senha = undefined;
-			return res
-				.status(201)
-				.json({ Mensagem: 'Novo usuário registrado com sucesso!', Usuario: documento });
+			return res.status(201).json({ Mensagem: 'Novo usuário registrado com sucesso!', Usuario: documento });
 		})
 		.catch((error) => {
 			const msgErro = {};
@@ -82,9 +80,7 @@ async function entrar(req, res) {
 
 			res.cookie('tokenUsuario', token, { maxAge: 600000, httpOnly: true });
 
-			return res
-				.status(200)
-				.json({ Mensagem: 'Autenticação realizada com sucesso!', Token: token });
+			return res.status(200).json({ Mensagem: 'Autenticação realizada com sucesso!', Token: token });
 		})
 		.catch((error) => {
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });

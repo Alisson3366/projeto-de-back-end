@@ -1,6 +1,7 @@
 const Usuario = require('../models/usuarios.models');
 const Pet = require('../models/pets.models');
 const jwt = require('jsonwebtoken');
+const { v4: uuid } = require('uuid');
 const logger = require('../middlewares/logger');
 
 // ROTAS PÚBLICAS DOS PETS (CONTA DE ADMINISTRADOR)
@@ -10,7 +11,7 @@ async function consultaPets(req, res) {
 			return res.status(200).json(pets);
 		})
 		.catch((error) => {
-			logger(error)
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
@@ -25,7 +26,7 @@ async function consultaPetId(req, res) {
 			}
 		})
 		.catch((error) => {
-			logger(error)
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
@@ -45,7 +46,7 @@ async function consultaPetsUsuario(req, res) {
 			}
 		})
 		.catch((error) => {
-			logger(error)
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }
@@ -65,7 +66,7 @@ async function adicionaPetUsuario(req, res) {
 	const payload = jwt.verify(token, segredo);
 
 	// req.cookies.idUsuario está armazenando o _id do usuário cujo token está acessando as rotas
-	const novoPet = { nome, sexo, raca, donoPet: payload.id };
+	const novoPet = { _id: uuid(), nome, sexo, raca, donoPet: payload.id };
 	const novoUsuario = await Usuario.findOne({ _id: payload.id });
 
 	await new Pet(novoPet)
@@ -83,7 +84,7 @@ async function adicionaPetUsuario(req, res) {
 				});
 				return res.status(500).json(msgErro);
 			}
-			console.log(error);
+			logger(error);
 			return res.status(422).json(msgErro);
 		});
 }
@@ -112,6 +113,7 @@ async function atualizaPetUsuario(req, res) {
 			Object.values(error.errors).forEach(({ properties }) => {
 				msgErro[properties.path] = properties.message;
 			});
+			logger(error);
 			return res.status(500).json(msgErro);
 		});
 }
@@ -134,7 +136,7 @@ async function deletaPetUsuario(req, res) {
 			}
 		})
 		.catch((error) => {
-			logger(error)
+			logger(error);
 			return res.status(500).json({ Erro: 'Erro interno na aplicação!' });
 		});
 }

@@ -11,15 +11,15 @@ router
 
 router
 	// GET /usuarios/:id_U/ -> Permite que qualquer pessoa consulte um usuário específico
-	.route('/usuario/:id')
+	.route('/usuarios/:id')
 	.get(middleware.validaIdUsuario, usuariosCTRL.consultaUsuarioIdAdmin);
 
 // ROTAS PRIVADAS RELATIVAS AO PRÓPRIO USUÁRIO
 router
-	// GET /usuario/ -> Permite que o usuário logado consulte seus próprios dados
-	// PATCH /usuario/ -> Permite que o usuário logado atualize seus próprios dados
-	// DELETE /usuario/ -> Permite que o usuário logado detele sua própria conta
-	.route('/usuario')
+	// GET /auth/usuarios/ -> Permite que o usuário logado consulte seus próprios dados
+	// PATCH /auth/usuarios/ -> Permite que o usuário logado atualize seus próprios dados
+	// DELETE /auth/usuarios/ -> Permite que o usuário logado detele sua própria conta
+	.route('/auth/usuarios')
 	.get(middleware.validaToken, usuariosCTRL.consultaUsuarioId)
 	.patch(middleware.validaToken, usuariosCTRL.atualizaUsuario)
 	.delete(middleware.validaToken, usuariosCTRL.deletaUsuario);

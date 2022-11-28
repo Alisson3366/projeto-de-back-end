@@ -3,7 +3,7 @@
 	"info": {
 		"title": "Meu Amigo PET",
 		"version": "1.0.0",
-		"description": "Meu Amigo PET é uma API REST cujo objetivo principal é conectar usuários, sejam eles pais de PETs ou aspirantes ao cargo, com objetivos semelhantes: adoção ou cruzamento. A conexão entre usuários se dá por meio de anúncios, os quais podem ser de adoção ou cruzamento. Assim, usuários logados podem acessar o 'feed de anúnicos' e obter informações de pets e usuários. A API visa atender usuários comuns e administradores com funcionalidades diferentes para cada um dos tipos de contas. Os usuários devem estar logados no servidor para acessar as diferentes rotas e suas funcionalidades. A aplicação foi construida usando-se Node.JS, módulos NPM (específicados no arquivo **package.json**), o framework Express e o [GitHub](https: //github.com/Alisson3366/projeto-de-back-end)."
+		"description": "Meu Amigo PET é uma **API REST** cujo objetivo principal é conectar usuários, sejam eles pais de PETs ou aspirantes ao cargo, com objetivos semelhantes: adoção ou cruzamento. A conexão entre usuários se dá por meio de anúncios, os quais podem ser de adoção ou cruzamento. Assim, usuários logados podem acessar o 'feed de anúnicos' e obter informações de pets e usuários. A API visa atender usuários comuns e administradores com funcionalidades diferentes para cada um dos tipos de contas. Os usuários devem estar logados no servidor para acessar as diferentes rotas e suas funcionalidades. A aplicação foi construida usando-se **Node.JS**, módulos NPM (específicados no arquivo **package.json**), o framework **Express** e o [GitHub](https://github.com/Alisson3366/projeto-de-back-end).\n\n**OBSERVAÇÃO**: Nas rotas que pedem {id} não é necessário passar nenhum _id como parâmetro, uma vez que a aplicação está utilizando cookies para armazenar o token. A documentação do Swagger não foi totalmente alterada para fins de consulta posterior por parte dos integrantes do projeto. Assim, basta usar um espaço em branco no momento em que o parâmetro for requisitado pela rota."
 	},
 	"servers": [
 		{
@@ -13,27 +13,29 @@
 	"tags": [
 		{
 			"name": "inicio",
-			"description": "Funcionalidades das rotas iniciais da API."
+			"description": "Funcionalidades das rotas iniciais da API"
 		},
 		{
 			"name": "usuarios",
-			"description": "Funcionalidades das rotas relativas aos próprios usuários."
+			"description": "Funcionalidades das rotas relativas aos próprios usuários"
 		},
 		{
 			"name": "anuncios",
-			"description": "Funcionalidades das rotas relativas aos anúncios dos usuários."
+			"description": "Funcionalidades das rotas relativas aos anúncios dos usuário"
 		},
 		{
 			"name": "pets",
-			"description": "Funcionalidades das rotas relativas aos pets dos usuários."
+			"description": "Funcionalidades das rotas relativas aos pets dos usuários"
 		}
 	],
 	"paths": {
 		"/": {
 			"get": {
-				"tags": ["inicio"],
-				"summary": "Boas vindas a API.",
-				"description": "Boas vindas a API.",
+				"tags": [
+					"inicio"
+				],
+				"summary": "Boas vindas a API",
+				"description": "Boas vindas a API",
 				"operationId": "boasVindas",
 				"responses": {
 					"200": {
@@ -56,12 +58,14 @@
 		},
 		"/registro": {
 			"post": {
-				"tags": ["inicio"],
-				"summary": "Registro na API.",
-				"description": "Registro na API.",
+				"tags": [
+					"inicio"
+				],
+				"summary": "Registro na API",
+				"description": "Registro na API",
 				"operationId": "registrar",
 				"requestBody": {
-					"description": "Registre-se na API informando email, senha e nome.",
+					"description": "Registre-se na API informando email, senha e nome",
 					"content": {
 						"application/json": {
 							"schema": {
@@ -139,12 +143,14 @@
 		},
 		"/entrar": {
 			"post": {
-				"tags": ["inicio"],
-				"summary": "Entrar na API.",
-				"description": "Entrar na API.",
+				"tags": [
+					"inicio"
+				],
+				"summary": "Entrar na API",
+				"description": "Entrar na API",
 				"operationId": "entrar",
 				"requestBody": {
-					"description": "Faça login na API usando email e senha.",
+					"description": "Faça login na API usando email e senha",
 					"content": {
 						"application/json": {
 							"schema": {
@@ -218,9 +224,11 @@
 		},
 		"/sair": {
 			"get": {
-				"tags": ["inicio"],
-				"summary": "Sair da API.",
-				"description": "Sair da API.",
+				"tags": [
+					"inicio"
+				],
+				"summary": "Sair da API",
+				"description": "Sair da API",
 				"operationId": "sair",
 				"responses": {
 					"200": {
@@ -253,12 +261,19 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			}
 		},
 		"/usuarios": {
 			"get": {
-				"tags": ["usuarios"],
+				"tags": [
+					"usuarios"
+				],
 				"summary": "Consulta de todos os usuários",
 				"description": "Consulta de todos os usuários",
 				"operationId": "consultaUsuarios",
@@ -294,9 +309,11 @@
 				}
 			}
 		},
-		"/usuario/{id}": {
+		"/usuarios/{id}": {
 			"get": {
-				"tags": ["usuarios"],
+				"tags": [
+					"usuarios"
+				],
 				"summary": "Consulta de usuário específico pelo ID",
 				"description": "Consulta de usuário específico pelo ID",
 				"operationId": "consultaUsuarioId",
@@ -304,7 +321,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do usuário a ser consultado.",
+						"description": "ID do usuário a ser consultado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -384,17 +401,118 @@
 						}
 					}
 				}
+			}
+		},
+		"/auth/usuarios": {
+			"get": {
+				"tags": [
+					"usuarios"
+				],
+				"summary": "Usuário logado consulta seus próprios dados",
+				"description": "Usuário logado consulta seus próprios dados",
+				"operationId": "consultaUsuarioId",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID do usuário a ser consultado",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Consulta efetuada com sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/USUARIOS"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ID de usuário inválido!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Token não informado ou inválido. Acesso negado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Usuário não localizado!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno na aplicação!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Erro": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			},
 			"patch": {
-				"tags": ["usuarios"],
-				"summary": "Atualiza um usuário já existente",
-				"description": "Atualiza um usuário já existente",
+				"tags": [
+					"usuarios"
+				],
+				"summary": "Usuário logado atualiza seus próprios dados",
+				"description": "Usuário logado atualiza seus próprios dados",
 				"operationId": "atualizaUsuario",
 				"parameters": [
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do usuário a ser atualizado.",
+						"description": "ID do usuário a ser atualizado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -403,7 +521,7 @@
 					}
 				],
 				"requestBody": {
-					"description": "Atualiza um usuário já existente.",
+					"description": "Atualiza um usuário já existente",
 					"content": {
 						"application/json": {
 							"schema": {
@@ -518,18 +636,25 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			},
 			"delete": {
-				"tags": ["usuarios"],
-				"summary": "Deleta um usuário da API",
-				"description": "Deleta um usuário da API",
+				"tags": [
+					"usuarios"
+				],
+				"summary": "Usuário logado deleta sua própria conta",
+				"description": "Usuário logado deleta sua própria conta",
 				"operationId": "deletaUsuario",
 				"parameters": [
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do usuário a ser deletado.",
+						"description": "ID do usuário a ser deletado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -613,12 +738,19 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			}
 		},
 		"/anuncios": {
 			"get": {
-				"tags": ["anuncios"],
+				"tags": [
+					"anuncios"
+				],
 				"summary": "Consulta de todos os anúncios",
 				"description": "Consulta de todos os anúncios",
 				"operationId": "consultaAnuncios",
@@ -654,9 +786,11 @@
 				}
 			}
 		},
-		"/anuncio/{id}": {
+		"/anuncios/{id}": {
 			"get": {
-				"tags": ["anuncios"],
+				"tags": [
+					"anuncios"
+				],
 				"summary": "Consulta de anúncio específico pelo ID",
 				"description": "Consulta de anúncio específico pelo ID",
 				"operationId": "consultaAnuncioID",
@@ -731,9 +865,11 @@
 				}
 			}
 		},
-		"/anuncios/usuario": {
+		"/auth/anuncios": {
 			"get": {
-				"tags": ["anuncios"],
+				"tags": [
+					"anuncios"
+				],
 				"summary": "Consulta dos anúncios do usuário logado",
 				"description": "Consulta dos anúncios do usuário logado",
 				"operationId": "consultaAnunciosUsuario",
@@ -796,10 +932,17 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			},
 			"post": {
-				"tags": ["anuncios"],
+				"tags": [
+					"anuncios"
+				],
 				"summary": "Cria novo anúncio do usuário logado",
 				"description": "Cria novo anúncio do usuário logado",
 				"operationId": "adicionaAnuncioUsuario",
@@ -912,12 +1055,19 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			}
 		},
-		"/anuncio/usuario/{id}": {
+		"/auth/anuncios/{id}": {
 			"patch": {
-				"tags": ["anuncios"],
+				"tags": [
+					"anuncios"
+				],
 				"summary": "Atualiza um anúncio já existente de um usuário",
 				"description": "Atualiza um anúncio já existente de um usuário",
 				"operationId": "atualizaAnuncioUsuario",
@@ -925,7 +1075,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do anúncio a ser atualizado.",
+						"description": "ID do anúncio a ser atualizado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -1057,10 +1207,17 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			},
 			"delete": {
-				"tags": ["anuncios"],
+				"tags": [
+					"anuncios"
+				],
 				"summary": "Deleta o anúncio de um usuário da API",
 				"description": "Deleta o anúncio de um usuário da API",
 				"operationId": "deletaAnuncioUsuario",
@@ -1068,7 +1225,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do anúncio a ser deletado.",
+						"description": "ID do anúncio a ser deletado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -1152,12 +1309,19 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			}
 		},
 		"/pets": {
 			"get": {
-				"tags": ["pets"],
+				"tags": [
+					"pets"
+				],
 				"summary": "Consulta de todos os pets",
 				"description": "Consulta de todos os pets",
 				"operationId": "consultaPets",
@@ -1193,9 +1357,11 @@
 				}
 			}
 		},
-		"/pet/{id}": {
+		"/pets/{id}": {
 			"get": {
-				"tags": ["pets"],
+				"tags": [
+					"pets"
+				],
 				"summary": "Consulta de pet específico pelo ID",
 				"description": "Consulta de pet específico pelo ID",
 				"operationId": "consultaPetId",
@@ -1203,7 +1369,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do pet a ser consultado.",
+						"description": "ID do pet a ser consultado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -1270,9 +1436,11 @@
 				}
 			}
 		},
-		"/pets/usuario": {
+		"/auth/pets": {
 			"get": {
-				"tags": ["pets"],
+				"tags": [
+					"pets"
+				],
 				"summary": "Consulta dos pets do usuário logado",
 				"description": "Consulta dos pets do usuário logado",
 				"operationId": "consultaPetsUsuario",
@@ -1335,10 +1503,17 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			},
 			"post": {
-				"tags": ["pets"],
+				"tags": [
+					"pets"
+				],
 				"summary": "Cria novo pet do usuário logado",
 				"description": "Cria novo pet do usuário logado",
 				"operationId": "adicionaPetUsuario",
@@ -1443,12 +1618,19 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			}
 		},
-		"/pet/usuario/{id}": {
+		"/auth/pets/{id}": {
 			"patch": {
-				"tags": ["pets"],
+				"tags": [
+					"pets"
+				],
 				"summary": "Atualiza um pet já existente de um usuário",
 				"description": "Atualiza um pet já existente de um usuário",
 				"operationId": "atualizaPetUsuario",
@@ -1456,7 +1638,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do pet a ser atualizado.",
+						"description": "ID do pet a ser atualizado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -1580,10 +1762,17 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			},
 			"delete": {
-				"tags": ["pets"],
+				"tags": [
+					"pets"
+				],
 				"summary": "Deleta o pet de um usuário da API",
 				"description": "Deleta o pet de um usuário da API",
 				"operationId": "deletaPetUsuario",
@@ -1591,7 +1780,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "ID do pet a ser deletado.",
+						"description": "ID do pet a ser deletado",
 						"required": true,
 						"schema": {
 							"type": "string",
@@ -1675,14 +1864,23 @@
 							}
 						}
 					}
-				}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
 			}
 		}
 	},
 	"components": {
 		"schemas": {
 			"USUARIOS": {
-				"required": ["email", "senha", "nome"],
+				"required": [
+					"email",
+					"senha",
+					"nome"
+				],
 				"type": "object",
 				"properties": {
 					"_id": {
@@ -1716,7 +1914,12 @@
 				}
 			},
 			"ANUNCIOS": {
-				"required": ["tipo", "titulo", "sexo", "raca"],
+				"required": [
+					"tipo",
+					"titulo",
+					"sexo",
+					"raca"
+				],
 				"type": "object",
 				"properties": {
 					"_id": {
@@ -1750,7 +1953,11 @@
 				}
 			},
 			"PETS": {
-				"required": ["nome", "sexo", "raca"],
+				"required": [
+					"nome",
+					"sexo",
+					"raca"
+				],
 				"type": "object",
 				"properties": {
 					"_id": {
@@ -1773,6 +1980,20 @@
 						"type": "string",
 						"example": "beagle"
 					}
+				}
+			}
+		}
+	},
+	"securitySchemes": {
+		"bearerAuth": {
+			"type": "HTTP",
+			"name": "token",
+			"in": "header",
+			"Scheme": "Bearer",
+			"bearerFormat": "JWT",
+			"flows": {
+				"implicit": {
+					"authorizationUrl": "http://localhost:8080/entrar"
 				}
 			}
 		}

@@ -3,7 +3,7 @@
 	"info": {
 		"title": "Meu Amigo PET",
 		"version": "1.0.0",
-		"description": "Meu Amigo PET é uma **API REST** cujo objetivo principal é conectar usuários, sejam eles pais de PETs ou aspirantes ao cargo, com objetivos semelhantes: adoção ou cruzamento. A conexão entre usuários se dá por meio de anúncios, os quais podem ser de adoção ou cruzamento. Assim, usuários logados podem acessar o 'feed de anúnicos' e obter informações de pets e usuários. A API visa atender usuários comuns e administradores com funcionalidades diferentes para cada um dos tipos de contas. Os usuários devem estar logados no servidor para acessar as diferentes rotas e suas funcionalidades. A aplicação foi construida usando-se **Node.JS**, módulos NPM (específicados no arquivo **package.json**), o framework **Express** e o [GitHub](https://github.com/Alisson3366/projeto-de-back-end).\n\n**OBSERVAÇÃO**: Nas rotas que pedem {id} não é necessário passar nenhum _id como parâmetro, uma vez que a aplicação está utilizando cookies para armazenar o token. A documentação do Swagger não foi totalmente alterada para fins de consulta posterior por parte dos integrantes do projeto. Assim, basta usar um espaço em branco no momento em que o parâmetro for requisitado pela rota."
+		"description": "Meu Amigo PET é uma **API REST** cujo objetivo principal é conectar usuários, sejam eles pais de PETs ou aspirantes ao cargo, com objetivos semelhantes: adoção ou cruzamento. A conexão entre usuários se dá por meio de anúncios, os quais podem ser de adoção ou cruzamento. Assim, usuários logados podem acessar o 'feed de anúnicos' e obter informações de pets e usuários. A API visa atender usuários comuns e administradores com funcionalidades diferentes para cada um dos tipos de contas. Os usuários devem estar logados no servidor para acessar as diferentes rotas e suas funcionalidades. A aplicação foi construida usando-se **Node.JS**, módulos NPM (específicados no arquivo **package.json**), o framework **Express** e o [GitHub](https://github.com/Alisson3366/projeto-de-back-end).\n\n**OBSERVAÇÃO**: A aplicação utiliza cookies para armazenar tokens de autenticação. Desse modo, as rotas iniciadas com /auth já carregam o token desde que o usuário tenha feito login, ou seja, tenha passado pela rota /entrar."
 	},
 	"servers": [
 		{
@@ -264,7 +264,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			}
@@ -411,18 +411,6 @@
 				"summary": "Usuário logado consulta seus próprios dados",
 				"description": "Usuário logado consulta seus próprios dados",
 				"operationId": "consultaUsuarioId",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "ID do usuário a ser consultado",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
-						}
-					}
-				],
 				"responses": {
 					"200": {
 						"description": "Consulta efetuada com sucesso!",
@@ -497,7 +485,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			},
@@ -508,18 +496,6 @@
 				"summary": "Usuário logado atualiza seus próprios dados",
 				"description": "Usuário logado atualiza seus próprios dados",
 				"operationId": "atualizaUsuario",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "ID do usuário a ser atualizado",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
-						}
-					}
-				],
 				"requestBody": {
 					"description": "Atualiza um usuário já existente",
 					"content": {
@@ -639,7 +615,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			},
@@ -650,18 +626,6 @@
 				"summary": "Usuário logado deleta sua própria conta",
 				"description": "Usuário logado deleta sua própria conta",
 				"operationId": "deletaUsuario",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "ID do usuário a ser deletado",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"example": "3732f525-2632-4460-b67d-fcad2262e8f1"
-						}
-					}
-				],
 				"responses": {
 					"200": {
 						"description": "Usuário deletado com sucesso!",
@@ -741,7 +705,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			}
@@ -935,7 +899,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			},
@@ -1058,7 +1022,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			}
@@ -1210,7 +1174,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			},
@@ -1312,7 +1276,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			}
@@ -1506,7 +1470,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			},
@@ -1621,7 +1585,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			}
@@ -1765,7 +1729,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			},
@@ -1867,7 +1831,7 @@
 				},
 				"security": [
 					{
-						"bearerAuth": []
+						"cookieAuth": []
 					}
 				]
 			}
@@ -1877,6 +1841,7 @@
 		"schemas": {
 			"USUARIOS": {
 				"required": [
+					"_id",
 					"email",
 					"senha",
 					"nome"
@@ -1915,10 +1880,11 @@
 			},
 			"ANUNCIOS": {
 				"required": [
+					"_id",
+					"donoAnuncio",
 					"tipo",
 					"titulo",
-					"sexo",
-					"raca"
+					"sexo"
 				],
 				"type": "object",
 				"properties": {
@@ -1954,9 +1920,10 @@
 			},
 			"PETS": {
 				"required": [
+					"_id",
+					"donoPet",
 					"nome",
-					"sexo",
-					"raca"
+					"sexo"
 				],
 				"type": "object",
 				"properties": {
@@ -1982,18 +1949,16 @@
 					}
 				}
 			}
-		}
-	},
-	"securitySchemes": {
-		"bearerAuth": {
-			"type": "HTTP",
-			"name": "token",
-			"in": "header",
-			"Scheme": "Bearer",
-			"bearerFormat": "JWT",
-			"flows": {
-				"implicit": {
-					"authorizationUrl": "http://localhost:8080/entrar"
+		},
+		"securitySchemes": {
+			"cookieAuth": {
+				"type": "apiKey",
+				"in": "cookie",
+				"name": "tokenUsuario",
+				"flows": {
+					"implicit": {
+						"authorizationUrl": "http://localhost:8080/entrar"
+					}
 				}
 			}
 		}

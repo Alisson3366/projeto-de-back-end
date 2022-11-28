@@ -55,9 +55,9 @@ const adicionaAnuncioUsuario = async (req, res) => {
 	const { tipo, titulo, sexo, raca, quantidade } = req.body;
 
 	// Verificação para criação de um novo anúncio
-	if (!tipo || !titulo || !sexo || !raca) {
+	if (!tipo || !titulo || !sexo) {
 		return res.status(422).json({
-			Erro: 'Para criar um anúncio informe: tipo, titulo, sexo, raca e quantidadede (opcional)!',
+			Erro: 'Para criar um anúncio informe: tipo, titulo e sexo, raca e quantidadede são opcionais!',
 		});
 	}
 
@@ -72,7 +72,6 @@ const adicionaAnuncioUsuario = async (req, res) => {
 	const segredo = process.env.SEGREDO;
 	const payload = jwt.verify(token, segredo);
 
-	// req.cookies.idUsuario está armazenando o _id do usuário cujo token está acessando as rotas
 	const novoAnuncio = {
 		_id: uuid(),
 		tipo,
@@ -107,14 +106,14 @@ const adicionaAnuncioUsuario = async (req, res) => {
 const atualizaAnuncioUsuario = async (req, res) => {
 	const { tipo, titulo, sexo, raca, quantidade } = req.body;
 
-	// Verificação para criação de um novo anúncio
-	if (!tipo && !titulo && !sexo && !raca) {
+	// Verificação para atualização de um anúncio
+	if (!tipo && !titulo && !sexo && !raca && !quantidade) {
 		return res.status(422).json({
-			Erro: 'Informe pelo menos uma informação para alterar o anúncio: tipo, titulo, sexo, raca e quantidadede!',
+			Erro: 'Informe pelo menos uma informação para alterar o anúncio: tipo, titulo, sexo, raca ou quantidadede!',
 		});
 	}
 
-	// Não permite criar um anúncio se o tipo não for adoção ou cruzamento
+	// Não permite atualizar o anúncio se o tipo não for adoção ou cruzamento
 	if (String(req.body.tipo).toLowerCase() != 'adoção' && String(req.body.tipo).toLowerCase() != 'cruzamento') {
 		return res.status(422).json({
 			Erro: 'O tipo do anúncio deve ser: adoção ou cruzamento!',

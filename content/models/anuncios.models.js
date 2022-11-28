@@ -53,6 +53,7 @@ const anuncioSchema = new mongoose.Schema(
 				return this.tipo === 'adoção';
 			},
 			min: 1,
+			default: null,
 		},
 	},
 	{
